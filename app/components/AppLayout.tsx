@@ -1,21 +1,16 @@
 import { useWalletManager } from '@noahsaso/cosmodal'
 import { useRouter } from 'next/router'
-import { PropsWithChildren, useCallback, useEffect } from 'react'
+import { PropsWithChildren, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 
 import { WalletProvider } from '@croncat-ui/common'
-import { usePlatform } from '@croncat-ui/utils'
 
-import {
-  commandModalVisibleAtom,
-  installWarningVisibleAtom,
-  noKeplrAccountAtom,
-} from '@/atoms'
+import { installWarningVisibleAtom, noKeplrAccountAtom } from '@/atoms'
 
+import { Footer } from './Footer'
 import { InstallKeplr } from './InstallKeplr'
 import { Nav } from './Nav'
 import { NoKeplrAccountModal } from './NoKeplrAccountModal'
-import { PageHeader } from './PageHeader'
 
 const AppLayoutInner = ({ children }: PropsWithChildren<{}>) => {
   const router = useRouter()
@@ -23,9 +18,6 @@ const AppLayoutInner = ({ children }: PropsWithChildren<{}>) => {
     installWarningVisibleAtom
   )
   const [noKeplrAccount, setNoKeplrAccount] = useRecoilState(noKeplrAccountAtom)
-  const [commandModalVisible, setCommandModalVisible] = useRecoilState(
-    commandModalVisibleAtom
-  )
 
   //! WALLET CONNECTION ERROR MODALS
   const { error } = useWalletManager()
@@ -39,30 +31,6 @@ const AppLayoutInner = ({ children }: PropsWithChildren<{}>) => {
     )
   }, [error, setInstallWarningVisible, setNoKeplrAccount])
 
-  //! COMMAND MODAL
-  // Hide modal when we nav away.
-  useEffect(() => {
-    setCommandModalVisible(false)
-  }, [router.asPath, setCommandModalVisible])
-  // Detect if Mac for checking keypress.
-  const { isMac } = usePlatform()
-  // Handle keypress to show command modal or not.
-  const handleKeyPress = useCallback(
-    (event) => {
-      if ((!isMac && event.ctrlKey) || event.metaKey) {
-        if (event.key === 'k') {
-          setCommandModalVisible((showSearch) => !showSearch)
-        }
-      }
-    },
-    [isMac, setCommandModalVisible]
-  )
-  // Setup command modal keypress.
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress)
-    return () => document.removeEventListener('keydown', handleKeyPress)
-  }, [handleKeyPress])
-
   return (
     <>
       {installWarningVisible && (
@@ -74,9 +42,10 @@ const AppLayoutInner = ({ children }: PropsWithChildren<{}>) => {
 
       <div className="w-full h-full">
         <Nav />
-        <PageHeader />
 
-        <main className="min-h-screen">{children}</main>
+        <main className="min-h-screen bg-gray-50">{children}</main>
+
+        <Footer />
       </div>
     </>
   )

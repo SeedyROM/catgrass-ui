@@ -23,7 +23,7 @@ export const STATUS_COLORS: { [key: string]: string } = {
   rejected: '#ED5276',
 }
 
-export const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID as string
+export const CHAIN_ID = (process.env.NEXT_PUBLIC_CHAIN_ID as string) || 'juno-1'
 export const CHAIN_NAME = process.env.NEXT_PUBLIC_CHAIN_NAME as string
 export const CHAIN_TXN_URL_PREFIX = process.env
   .NEXT_PUBLIC_CHAIN_TXN_URL_PREFIX as string
@@ -61,7 +61,7 @@ export const DAO_STATIC_PROPS_CACHE_SECONDS = parseInt(
 )
 
 // Lame hardcoding i know... in future, process image and find main theme
-export const chainColors = {
+export const chainColors: Record<string, any> = {
   'juno-1': '#F0827D',
   'osmosis-1': '#4F01A8',
   'stargaze-1': '#80D5C0',

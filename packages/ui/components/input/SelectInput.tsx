@@ -40,7 +40,7 @@ export const SelectInput = <
   return (
     <select
       className={clsx(
-        'py-2 px-3 text-body bg-transparent rounded-lg border focus:outline-none focus:ring-1 ring-brand ring-offset-0 transition border-default',
+        'py-3 px-3 w-full text-body bg-transparent rounded-lg border-2 focus:outline-none focus:ring-2 ring-gray-400 ring-offset-0 transition border-default',
         { 'ring-1 ring-error': error }
       )}
       {...props}

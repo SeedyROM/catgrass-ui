@@ -22,7 +22,6 @@ import {
 import {
   Action,
   ActionComponent,
-  ActionKey,
   UseDecodedCosmosMsg,
   UseDefaults,
   UseTransformToCosmos,
@@ -137,12 +136,7 @@ const Component: ActionComponent = (props) => {
 
     // All instantiate actions' data that instantiate the same code ID.
     const instantiateActionsData = props.allActionsWithData
-      .filter(
-        ({ key, data }) =>
-          key === ActionKey.Instantiate &&
-          'codeId' in data &&
-          data.codeId === codeId
-      )
+      .filter(({ data }) => data.codeId === codeId)
       .map(({ data }) => data) as InstantiateData[]
     // Index of this action in the list of all instantiation actions.
     const innerIndex = instantiateActionsData.indexOf(
@@ -194,10 +188,10 @@ const Component: ActionComponent = (props) => {
 }
 
 export const instantiateAction: Action<InstantiateData> = {
-  key: ActionKey.Instantiate,
+  // key: ActionKey.Instantiate,
   Icon: InstantiateIcon,
-  label: 'Instantiate Smart Contract',
-  description: 'Instantiate a smart contract.',
+  title: 'Instantiate Smart Contract',
+  subtitle: 'Instantiate a smart contract.',
   Component,
   useDefaults,
   useTransformToCosmos,
