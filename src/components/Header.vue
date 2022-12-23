@@ -152,9 +152,29 @@ const navData = [
       },
     ],
   },
+  // {
+  //   title: "Agents",
+  //   href: "/agents",
+  //   sub: [
+  //     // {
+  //     //   icon: CommandLineIcon,
+  //     //   title: "Agent Setup",
+  //     //   subtitle: "Install & become an agent",
+  //     //   href: "/agents/setup",
+  //     //   sort: 9,
+  //     // },
+  //     {
+  //       icon: QuestionMarkCircleIcon,
+  //       title: "FAQs",
+  //       subtitle: "Helpful answers & resources",
+  //       href: "/faqs",
+  //       sort: 10,
+  //     },
+  //   ],
+  // },
   {
-    title: "Agents",
-    href: "/agents",
+    title: "More",
+    href: "#",
     sub: [
       {
         icon: CommandLineIcon,
@@ -163,26 +183,6 @@ const navData = [
         href: "/agents",
         sort: 9,
       },
-      // {
-      //   icon: CommandLineIcon,
-      //   title: "Agent Setup",
-      //   subtitle: "Install & become an agent",
-      //   href: "/agents/setup",
-      //   sort: 9,
-      // },
-      {
-        icon: QuestionMarkCircleIcon,
-        title: "FAQs",
-        subtitle: "Helpful answers & resources",
-        href: "/faqs",
-        sort: 10,
-      },
-    ],
-  },
-  {
-    title: "More",
-    href: "#",
-    sub: [
       {
         icon: PresentationChartLineIcon,
         title: "Stats",

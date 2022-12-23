@@ -1,13 +1,13 @@
 <template>
   <main>
-    <PageHeader title="Agents" />
+    <PageHeader title="Agents" backgroundColor="#98f0ff" />
 
     <div class="py-8 md:mx-auto md:max-w-6xl">
       <div class="w-full px-4">
         <div>
           <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
 
-            <li v-for="(item, idx) in networksStats" :key="idx" class="col-span-1 flex rounded-md shadow-sm">
+            <li v-for="(item, idx) in networksStats" :key="idx" class="col-span-1 flex rounded-md">
               <div 
                 class="flex-shrink-0 flex items-center justify-center w-16 bg-orange-600 text-white text-sm font-medium rounded-l-md"
                 :style="{ backgroundColor: item.brandColor }"
@@ -15,9 +15,11 @@
                 <LogoFromImage class="block" :rounded="true" size="42" :src="item.asset?.logo_URIs?.png || ''" />
               </div>
               <div
-                class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
+                class="flex flex-1 items-center justify-between truncate rounded-r-md border-t-2 border-r-2 border-b-2 border-gray-200 bg-white"
+                :style="{ borderColor: item.brandColor }"
+              >
                 <div class="flex-1 truncate px-4 py-2 text-sm">
-                  <a href="#" class="font-medium text-gray-900 hover:text-gray-600">{{ item.chain.pretty_name }}</a>
+                  <h3 class="font-medium text-gray-900 hover:text-gray-600">{{ item.chain.pretty_name }}</h3>
                   <p class="text-gray-500">{{item.stats}}</p>
                 </div>
               </div>
@@ -42,7 +44,7 @@
                   {{ ellipseLongString(agent.address, 20) }}
                   <dl class="font-normal lg:hidden">
                     <dt class="sr-only">Title</dt>
-                    <dd class="mt-1 truncate text-gray-700">{{ agent.total_tasks_executed }}</dd>
+                    <dd class="mt-1 truncate text-gray-700">{{ addCommas(agent.total_tasks_executed) }}</dd>
                     <dt class="sr-only sm:hidden">Email</dt>
                     <dd class="mt-1 truncate text-gray-500 sm:hidden">
                       <template v-for="native in agent.balance.native" :key="native">
@@ -54,7 +56,7 @@
                     </dd>
                   </dl>
                 </td>
-                <td class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">{{ agent.total_tasks_executed }}</td>
+                <td class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">{{ addCommas(agent.total_tasks_executed) }}</td>
                 <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                   <template v-for="native in agent.balance.native" :key="native">
                     <Balance :balance="native" :decimals="6" />
@@ -86,7 +88,7 @@
 <script lang="ts">
 import { mapState, mapActions } from "pinia";
 import { useMultiWallet } from "@/stores/multiWallet"
-import { ellipseLongString } from "@/utils/helpers"
+import { ellipseLongString, addCommas } from "@/utils/helpers"
 import { deployedContracts } from "@/utils/constants"
 import PageHeader from "@/components/PageHeader.vue";
 import Loader from "@/components/Loader.vue";
@@ -105,6 +107,7 @@ export default {
 
   data() {
     return {
+      addCommas,
       ellipseLongString,
       loading: false,
       agentMap: {},
@@ -165,8 +168,6 @@ export default {
               try {
                 const data = await q.wasm.queryContractSmart(contractAddr, msgGetAgentDetails(agent))
                 data.address = agent
-                console.log('data', data);
-                
                 this.agentMap[agent] = data
               } catch (e) {
                 // 
