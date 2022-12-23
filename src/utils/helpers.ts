@@ -224,7 +224,7 @@ export function nativeTokenDecimals(denom: string): number | undefined {
   return asset?.decimals;
 }
 
-export const addCommas = (s: string) => s.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+export const addCommas = (s: string | number) => `${s}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
 export const formatInterval = (interval: any) => {
   if (!interval) return ''

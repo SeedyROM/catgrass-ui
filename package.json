@@ -23,6 +23,7 @@
     "@cosmos-kit/vectis": "^0.12.0",
     "@headlessui/vue": "^1.7.4",
     "@heroicons/vue": "^2.0.13",
+    "buffer": "^6.0.3",
     "chain-registry": "^1.5.0",
     "codemirror": "^6.0.1",
     "cron-parser": "^4.7.0",
