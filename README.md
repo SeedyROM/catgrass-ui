@@ -1,43 +1,70 @@
-## Croncat UI
+# [catgrass-ui](https://cron.cat)
 
-# 🚨 ALERT! 🚨
+Imagine your fur, fluffed by a warm breeze as you lay upon a high rock perch garnished with moss from the adjacent bonzai tree. You feel the calm, the subtle flowing energy of being, the essence of movement. You cannot help but explore further, unfold your purrpose, discover the flow state others have tread before you. Soak in the depth of the communal conscience.
 
-This repo in under heavy development! Use with extreme caution!
+❤️ Walter
 
----
+## Project Setup
 
-**CREDIT:** Project framework borrowing heavily from [DAO DAO](https://github.com/DA0-DA0), since the structure was beautifully made.
-
-## Development
-
-### Clone this repo and install dependencies
-
-```bash
-git clone https://github.com/croncats/catgrass-ui
-cd catgrass-ui
-yarn
+```sh
+npm i
 ```
 
-### Turborepo
+### Compile and Hot-Reload for Development
 
-Run the `dev` script concurrently for all packages to develop locally.
-
-```bash
-yarn turbo run dev
+```sh
+npm run dev
 ```
 
-Learn more about [Turborepo](https://turborepo.org/docs).
+### Type-Check, Compile and Minify for Production
 
-## Packages
+```sh
+npm run build
+```
 
-#### `apps/`
+### Run Headed Component Tests with [Cypress Component Testing](https://on.cypress.io/component)
 
-- [`app`](./apps/README.md)
+```sh
+npm run test:unit:dev # or `npm run test:unit` for headless testing
+```
 
-#### `packages/`
+### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
 
-- [(wip)]
+```sh
+npm run test:e2e:dev
+```
 
-### Learn More
+This runs the end-to-end tests against the Vite development server.
+It is much faster than the production build.
 
-This project was bootstrapped with [`npx create-turbo@latest`](https://turborepo.org/docs/getting-started).
+But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
+
+```sh
+npm run build
+npm run test:e2e
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+npm run lint
+```
+
+## Recommended IDE Setup
+
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+
+## Type Support for `.vue` Imports in TS
+
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+
+If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+
+1. Disable the built-in TypeScript Extension
+    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
+    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
+2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vitejs.dev/config/).
