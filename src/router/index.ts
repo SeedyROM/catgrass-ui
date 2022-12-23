@@ -40,6 +40,17 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/tasks",
+      name: "tasks",
+      component: () => import("../views/Tasks.vue"),
+      children: [
+        {
+          path: "all",
+          component: () => import("../views/TasksAll.vue"),
+        },
+      ],
+    },
   ],
 });
 

@@ -1,6 +1,6 @@
 <template>
   <main>
-    <PageHeader title="Agents" backgroundColor="#98f0ff" />
+    <PageHeader title="All Tasks" backgroundColor="#98f0ff" />
 
     <div class="py-8 md:mx-auto md:max-w-6xl">
       <div class="w-full px-4">
@@ -32,46 +32,41 @@
           <table class="min-w-full divide-y divide-gray-300">
             <thead class="bg-gray-50">
               <tr>
-                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Address</th>
-                <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">Tasks Executed</th>
-                <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell">Unclaimed Rewards</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Task Hash</th>
+                <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">Remaining Execs</th>
+                <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell">Deposits</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stats</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
-              <tr v-for="(agent, idx) in agents" :key="idx">
+              <tr v-for="(item, idx) in tasks" :key="idx">
                 <td class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-6">
-                  {{ ellipseLongString(agent.address, 20) }}
+                  {{ ellipseLongString(item.task_hash, 20) }}
                   <dl class="font-normal lg:hidden">
-                    <dt class="sr-only">Address</dt>
-                    <dd class="mt-1 truncate text-gray-700">{{ addCommas(agent.total_tasks_executed) }}</dd>
-                    <dt class="sr-only sm:hidden">Unclaimed Rewards</dt>
+                    <dt class="sr-only">Task Hash</dt>
+                    <dd class="mt-1 truncate text-gray-700">{{ computeRemainingExecs(item) }}</dd>
+                    <dt class="sr-only sm:hidden">Deposits</dt>
                     <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                      <template v-for="native in agent.balance.native" :key="native">
+                      <template v-for="native in item.total_deposit" :key="native">
                         <Balance :balance="native" :decimals="6" />
                       </template>
-                      <template v-for="cw20 in agent.balance.cw20" :key="cw20">
+                      <template v-for="cw20 in item.total_cw20_deposit" :key="cw20">
                         <Balance :balance="cw20" :decimals="6" />
                       </template>
                     </dd>
                   </dl>
                 </td>
-                <td class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">{{ addCommas(agent.total_tasks_executed) }}</td>
+                <td class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">{{ computeRemainingExecs(item) }}</td>
                 <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                  <template v-for="native in agent.balance.native" :key="native">
+                  <template v-for="native in item.total_deposit" :key="native">
                     <Balance :balance="native" :decimals="6" />
                   </template>
-                  <template v-for="cw20 in agent.balance.cw20" :key="cw20">
+                  <template v-for="cw20 in item.total_cw20_deposit" :key="cw20">
                     <Balance :balance="cw20" :decimals="6" />
                   </template>
                 </td>
                 <td class="px-3 py-4 text-sm text-gray-500">
-                  <span :class="{
-                    'inline-flex rounded-full px-2 text-xs font-semibold leading-5': true,
-                    'bg-green-100 text-green-800': agent.status == 'Active',
-                    'bg-gray-100 text-gray-800': agent.status == 'Pending',
-                    'bg-orange-100 text-orange-800': agent.status == 'Nominated',
-                  }">{{agent.status}}</span>
+                  <span class="inline-flex rounded-full px-2 text-xs font-semibold leading-5">{{ getTaskStats(item) }}</span>
                 </td>
               </tr>
             </tbody>
@@ -90,6 +85,7 @@ import { mapState, mapActions } from "pinia";
 import { useMultiWallet } from "@/stores/multiWallet"
 import { ellipseLongString, addCommas } from "@/utils/helpers"
 import { deployedContracts } from "@/utils/constants"
+import type { Task } from "@/utils/types"
 import PageHeader from "@/components/PageHeader.vue";
 import Loader from "@/components/Loader.vue";
 import Label from "@/components/core/display/Label.vue";
@@ -110,24 +106,28 @@ export default {
       addCommas,
       ellipseLongString,
       loading: false,
-      agentMap: {},
+      tasksMap: {},
       networkMap: {},
     };
   },
 
   computed: {
     ...mapState(useMultiWallet, ['networks', 'walletManager']),
-    agents() {
-      return Object.values(this.agentMap)
+    tasks() {
+      let a: any = []
+      Object.keys(this.tasksMap).forEach(k => {
+        a = a.concat(this.tasksMap[k])
+      })
+      return a
     },
     networksStats() {
       if (!this.networks || this.networks.length === 0) return;
       return this.networks.filter(n => n.supported != this.disabled).map(n => {
         if (this.networkMap[n.chain.chain_name]) {
           const m = this.networkMap[n.chain.chain_name]
-          n.stats = `${m.active || '-'} Active / ${m.pending || '-'} Pending`
+          n.stats = `${m || '-'} ${m == 1 ? 'Task' : 'Tasks'}`
         } else {
-          n.stats = `- Active / - Pending`
+          n.stats = `- Tasks`
         }
         return n
       })
@@ -136,9 +136,23 @@ export default {
 
   methods: {
     ...mapActions(useMultiWallet, ['querier']),
+    getTaskStats(task: Task) {
+      const queries = task.queries && task.queries.length > 0 ? `${task.queries.length == 1 ? '1 query, ' : task.queries.length + ' queries, '}` : ''
+      const transforms = task.transforms ? `${task.transforms.length == 1 ? ' 1 transform, ' : task.transforms.length + ' transforms, '}` : ''
+      const actions = `${task.actions.length == 1 ? '1 action' : task.actions.length + ' actions'}`
+      return `${queries}${transforms}${actions}`
+    },
+    computeRemainingExecs(task: Task) {
+      // divide total deposit amount by amount for 1 task
+      const totalAmt = parseInt(`${task?.total_deposit[0].amount}`)
+      const singleAmt = parseInt(`${task?.amount_for_one_task_native[0].amount}`)
+      console.log('totalAmt / singleAmt', totalAmt, singleAmt, totalAmt / singleAmt);
+      
+
+      return `${Math.floor(totalAmt / singleAmt)}`
+    },
     async loadContext() {
-      const msgGetAgentIds = { get_agent_ids: {} }
-      const msgGetAgentDetails = (account_id: string) => ({ get_agent: { account_id } })
+      const msgGetTasks = { get_tasks: {} }
 
       for (const prefix in deployedContracts) {
         if (deployedContracts[prefix] && deployedContracts[prefix].manager) {
@@ -147,32 +161,16 @@ export default {
           if (network?.chain?.chain_name) {
             const chainName = network.chain?.chain_name
             const q = await this.querier(chainName)
-            let agentsList: string[] = []
 
-            // First get the list of agents, compute network stats
+            // Get all the tasks for all networks
             try {
-              const res = await q.wasm.queryContractSmart(contractAddr, msgGetAgentIds)
-              
-              this.networkMap[chainName] = {
-                active: res.active.length,
-                pending: res.pending.length,
-              }
-              agentsList = res.active ? agentsList.concat(res.active) : agentsList
-              agentsList = res.pending ? agentsList.concat(res.pending) : agentsList
+              const res = await q.wasm.queryContractSmart(contractAddr, msgGetTasks)
+              console.log('res', res);
+              this.networkMap[chainName] = res && res.length ? res.length : 0
+              this.tasksMap[chainName] = res && res.length ? res : []
             } catch (e) {
               // 
             }
-
-            // Next get all the agents infoz
-            agentsList.forEach(async (agent: any) => {
-              try {
-                const data = await q.wasm.queryContractSmart(contractAddr, msgGetAgentDetails(agent))
-                data.address = agent
-                this.agentMap[agent] = data
-              } catch (e) {
-                // 
-              }
-            })
           }
         }
       }
