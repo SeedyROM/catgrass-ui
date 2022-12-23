@@ -250,15 +250,16 @@ export const useMultiWallet = defineStore(
           try {
             const httpBatchClient = new HttpBatchClient(rpcEndpoint, {
               batchSizeLimit: batchSizeLimit || 5,
-              dispatchInterval: dispatchInterval || 1 * 1000
+              dispatchInterval: dispatchInterval || 1 * 100
             })
-            querier = await Tendermint34Client.create(httpBatchClient)
+            const client = await Tendermint34Client.create(httpBatchClient)
+            querier = QueryClient.withExtensions(client, setupWasmExtension)            
           } catch (e) {
             return Promise.reject(e)
           }
         }
 
-        if (!querier || !querier.status) return Promise.reject('Requires RPC connection');
+        if (!querier || !querier.tmClient) return Promise.reject('Requires RPC connection');
         tmProviderCache[chainName] = querier
         return querier
       },
@@ -284,7 +285,11 @@ export const useMultiWallet = defineStore(
         if (!contractAddr || !queryMsg) return Promise.reject('Missing required params')
         // Derive the current chain name from contract bech32
         const { prefix } = fromBech32(contractAddr);
-        let querier = this.getQuerier(prefix)
+        console.log('prefix', prefix);
+        
+        let querier = await this.getQuerier(prefix)
+        console.log('querier', querier);
+        
 
         try {
           const res = await querier.queryContractSmart(contractAddr, queryMsg)

@@ -158,11 +158,18 @@ const navData = [
     sub: [
       {
         icon: CommandLineIcon,
-        title: "Agent Setup",
-        subtitle: "Install & become an agent",
-        href: "/agents/setup",
+        title: "Agents",
+        subtitle: "View all networks agents",
+        href: "/agents",
         sort: 9,
       },
+      // {
+      //   icon: CommandLineIcon,
+      //   title: "Agent Setup",
+      //   subtitle: "Install & become an agent",
+      //   href: "/agents/setup",
+      //   sort: 9,
+      // },
       {
         icon: QuestionMarkCircleIcon,
         title: "FAQs",
