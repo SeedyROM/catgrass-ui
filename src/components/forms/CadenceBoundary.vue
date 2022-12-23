@@ -358,8 +358,9 @@ export default {
       this.updateTask({ boundary: { ...this.boundary } })
     },
     async getCurrentBlockHeight() {
-      const q = await this.querier(this.signer.chain.chain_name)
-      const r = await q.status()
+      const chainName = this.signer.chain.chain_name
+      const q = await this.querier(chainName)
+      const r = await q.tmClient.status()
       if (r?.syncInfo?.latestBlockHeight) this.blockHeight = r.syncInfo.latestBlockHeight
       this.updateTaskContext({ blockHeight: this.blockHeight })
     },

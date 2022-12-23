@@ -152,6 +152,8 @@ export default {
             // First get the list of agents, compute network stats
             try {
               const res = await q.wasm.queryContractSmart(contractAddr, msgGetAgentIds)
+              console.log('res', chainName, res);
+              
               
               this.networkMap[chainName] = {
                 active: res.active.length,
