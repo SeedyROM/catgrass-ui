@@ -1,6 +1,6 @@
 <template>
   <main>
-    <PageHeader title="Agents" backgroundColor="#98f0ff" />
+    <PageHeader title="Agents" backgroundColor="#FD5B70" />
 
     <div class="py-8 md:mx-auto md:max-w-6xl">
       <div class="w-full px-4">

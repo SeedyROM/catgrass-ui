@@ -1,6 +1,6 @@
 <template>
   <main>
-    <PageHeader title="All Tasks" backgroundColor="#98f0ff" />
+    <PageHeader title="All Tasks" backgroundColor="#276A7B" />
 
     <div class="py-8 md:mx-auto md:max-w-6xl">
       <div class="w-full px-4">
@@ -33,9 +33,11 @@
             <thead class="bg-gray-50">
               <tr>
                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Task Hash</th>
+                <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">Owner</th>
                 <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">Remaining Execs</th>
                 <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell">Deposits</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stats</th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6"></th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
@@ -44,6 +46,7 @@
                   {{ ellipseLongString(item.task_hash, 20) }}
                   <dl class="font-normal lg:hidden">
                     <dt class="sr-only">Task Hash</dt>
+                    <dd class="mt-1 truncate text-gray-700">{{ ellipseLongString(item.owner_id, 14) }}</dd>
                     <dd class="mt-1 truncate text-gray-700">{{ computeRemainingExecs(item) }}</dd>
                     <dt class="sr-only sm:hidden">Deposits</dt>
                     <dd class="mt-1 truncate text-gray-500 sm:hidden">
@@ -56,6 +59,7 @@
                     </dd>
                   </dl>
                 </td>
+                <td class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">{{ ellipseLongString(item.owner_id, 14) }}</td>
                 <td class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">{{ computeRemainingExecs(item) }}</td>
                 <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                   <template v-for="native in item.total_deposit" :key="native">
@@ -67,6 +71,9 @@
                 </td>
                 <td class="px-3 py-4 text-sm text-gray-500">
                   <span class="inline-flex rounded-full px-2 text-xs font-semibold leading-5">{{ getTaskStats(item) }}</span>
+                </td>
+                <td class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                  <a href="#" class="text-indigo-600 hover:text-indigo-900">View</a>
                 </td>
               </tr>
             </tbody>
@@ -146,9 +153,6 @@ export default {
       // divide total deposit amount by amount for 1 task
       const totalAmt = parseInt(`${task?.total_deposit[0].amount}`)
       const singleAmt = parseInt(`${task?.amount_for_one_task_native[0].amount}`)
-      console.log('totalAmt / singleAmt', totalAmt, singleAmt, totalAmt / singleAmt);
-      
-
       return `${Math.floor(totalAmt / singleAmt)}`
     },
     async loadContext() {
@@ -165,7 +169,6 @@ export default {
             // Get all the tasks for all networks
             try {
               const res = await q.wasm.queryContractSmart(contractAddr, msgGetTasks)
-              console.log('res', res);
               this.networkMap[chainName] = res && res.length ? res.length : 0
               this.tasksMap[chainName] = res && res.length ? res : []
             } catch (e) {
