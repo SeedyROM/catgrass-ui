@@ -15,9 +15,11 @@ import { getChainData, uniq } from "@/utils/helpers";
 import { appConfig, filteredChainNames, deployedContracts } from "@/utils/constants";
 // import { wallets as cosmostationWallets } from "@cosmos-kit/cosmostation";
 // import { wallets as keplrWallet } from "@cosmos-kit/keplr";
+import { wallets as cosmostationWallets } from "../utils/cosmostation/src";
+import { wallets as keplrWallet } from "../utils/keplr/src";
 import { wallets as leapwallets } from "@cosmos-kit/leap";
 import { wallets as vectiswallets } from "@cosmos-kit/vectis";
-// import { wallets as trustwallets } from "@cosmos-kit/trust";
+import { wallets as trustwallets } from "@cosmos-kit/trust";
 // TODO: Soon!
 // import { wallets as omniwallets } from "@cosmos-kit/omni";
 
@@ -155,11 +157,11 @@ export const useMultiWallet = defineStore(
           chains: filteredChains,
           assetLists: assets,
           wallets: [
-            // ...keplrWallet,
-            // ...cosmostationWallets,
+            ...keplrWallet,
+            ...cosmostationWallets,
             ...leapwallets,
             ...vectiswallets,
-            // ...trustwallets,
+            ...trustwallets,
             // ...omniwallets,
           ],
           signerOptions: {

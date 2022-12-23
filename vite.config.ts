@@ -27,6 +27,7 @@ export default defineConfig({
       },
       // Enable esbuild polyfill plugins
       plugins: [
+        // https://stackoverflow.com/questions/72267731/uncaught-in-promise-referenceerror-buffer-is-not-defined-in-vite-sveltekit-wi
         NodeGlobalsPolyfillPlugin({
           buffer: true
         })
