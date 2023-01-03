@@ -121,7 +121,7 @@ html[data-theme='dark'] {
 ol,
 ul,
 menu {
-  list-style: inherit;
+  list-style: none;
 }
 
 .CodeMirror {

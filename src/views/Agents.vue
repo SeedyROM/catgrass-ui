@@ -143,7 +143,8 @@ export default {
       for (const prefix in deployedContracts) {
         if (deployedContracts[prefix] && deployedContracts[prefix].manager) {
           const contractAddr = deployedContracts[prefix].manager
-          const network = this.networks.find(n => n.chain.bech32_prefix === prefix)
+          const network = this.networks.find(n => n.chain.chain_name.search(prefix) > -1)
+          
           if (network?.chain?.chain_name) {
             const chainName = network.chain?.chain_name
             const q = await this.querier(chainName)
@@ -152,7 +153,6 @@ export default {
             // First get the list of agents, compute network stats
             try {
               const res = await q.wasm.queryContractSmart(contractAddr, msgGetAgentIds)
-              
               this.networkMap[chainName] = {
                 active: res.active.length,
                 pending: res.pending.length,

@@ -34,17 +34,17 @@
         <!-- Buttons: CopyCat, Owner(Refill, Delete) -->
         <div class="flex flex-col md:flex-row md:justify-between">
           <div class="flex flex-col md:flex-row">
-            <Button class="mb-4 md:mb-0" @click="" size="2xl" variant="primary">
+            <Button class="mb-4 md:mb-0 bg-green-700 hover:bg-green-800" @click="copycatTask" size="2xl" variant="primary">
               <DocumentDuplicateIcon class="w-6" />
               <span class="uppercase">CopyCat</span>
             </Button>
           </div>
           <div v-if="isOwner" class="flex flex-col md:flex-row">
-            <Button class="mb-4 md:mb-0 md:mr-4" @click="" size="2xl" variant="primary">
+            <Button class="mb-4 md:mb-0 md:mr-4" @click="refillTask" size="2xl" variant="primary">
               <ArrowUpCircleIcon class="w-6" />
               <span class="uppercase">Refill</span>
             </Button>
-            <Button class="mb-4 md:mb-0" @click="" size="2xl" variant="secondary">
+            <Button class="mb-4 md:mb-0" @click="deleteTask" size="2xl" variant="secondary">
               <TrashIcon class="w-6" />
               <span class="uppercase">Delete</span>
             </Button>
@@ -54,6 +54,35 @@
         <!-- Summary: Occurences, balance info -->
 
         <!-- TX History -->
+        <div class="py-12 flow-root">
+          <ul role="list" class="-mb-8">
+            <li v-for="(event, eventIdx) in txHistory" :key="event.id">
+              <div class="relative pb-8">
+                <span v-if="eventIdx !== txHistory.length - 1" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
+                  aria-hidden="true" />
+                <div class="relative flex space-x-3">
+                  <div>
+                    <span
+                      :class="[event.iconBackground, 'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-gray-50']">
+                      <component :is="event.icon" class="h-5 w-5 text-white" aria-hidden="true" />
+                    </span>
+                  </div>
+                  <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                    <div>
+                      <p class="text-sm text-gray-500">
+                        {{ event.content }} <a :href="event.href" class="font-medium text-gray-900">{{ event.target }}</a>
+                      </p>
+                    </div>
+                    <div class="whitespace-nowrap text-right text-sm text-gray-500">
+                      <time :datetime="event.datetime">{{ event.date }}</time>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
       </div>
     </template>
   </main>
@@ -77,6 +106,7 @@ import {
   DocumentDuplicateIcon,
   TrashIcon,
 } from '@heroicons/vue/24/solid'
+import { CheckIcon, HandThumbUpIcon, UserIcon } from '@heroicons/vue/20/solid'
 
 const demoTask = {
   "task_hash": "24946f413f61e8ef1d26ce2b267dd0915549bf2f22b3a0c70b0736493d1f6e9c",
@@ -122,6 +152,60 @@ const demoTask = {
   "queries": null
 }
 
+
+const txHistory = [
+  {
+    id: 1,
+    content: 'Applied to',
+    target: 'Front End Developer',
+    href: '#',
+    date: 'Sep 20',
+    datetime: '2020-09-20',
+    icon: UserIcon,
+    iconBackground: 'bg-gray-400',
+  },
+  {
+    id: 2,
+    content: 'Advanced to phone screening by',
+    target: 'Bethany Blake',
+    href: '#',
+    date: 'Sep 22',
+    datetime: '2020-09-22',
+    icon: HandThumbUpIcon,
+    iconBackground: 'bg-blue-500',
+  },
+  {
+    id: 3,
+    content: 'Completed phone screening with',
+    target: 'Martha Gardner',
+    href: '#',
+    date: 'Sep 28',
+    datetime: '2020-09-28',
+    icon: CheckIcon,
+    iconBackground: 'bg-green-500',
+  },
+  {
+    id: 4,
+    content: 'Advanced to interview by',
+    target: 'Bethany Blake',
+    href: '#',
+    date: 'Sep 30',
+    datetime: '2020-09-30',
+    icon: HandThumbUpIcon,
+    iconBackground: 'bg-blue-500',
+  },
+  {
+    id: 5,
+    content: 'Completed interview with',
+    target: 'Katherine Snyder',
+    href: '#',
+    date: 'Oct 4',
+    datetime: '2020-10-04',
+    icon: CheckIcon,
+    iconBackground: 'bg-green-500',
+  },
+]
+
 export default {
   components: {
     PageHeader,
@@ -143,6 +227,7 @@ export default {
       loading: false,
       exists: true,
       task: {},
+      txHistory,
     };
   },
 
@@ -186,6 +271,15 @@ export default {
       const totalAmt = parseInt(`${task?.total_deposit[0].amount}`)
       const singleAmt = parseInt(`${task?.amount_for_one_task_native[0].amount}`)
       return `${Math.floor(totalAmt / singleAmt)}`
+    },
+    deleteTask() {
+      console.log('deleteTaskTASKKKKK', this.task);
+    },
+    refillTask() {
+      console.log('refillTask', this.task);
+    },
+    copycatTask() {
+      console.log('copycatTask', this.task);
     },
     async loadContext() {
       const task_hash = this.$route.params?.hash

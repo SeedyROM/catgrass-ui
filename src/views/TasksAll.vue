@@ -161,7 +161,7 @@ export default {
       for (const prefix in deployedContracts) {
         if (deployedContracts[prefix] && deployedContracts[prefix].manager) {
           const contractAddr = deployedContracts[prefix].manager
-          const network = this.networks.find(n => n.chain.bech32_prefix === prefix)
+          const network = this.networks.find(n => n.chain.chain_name.search(prefix) > -1)
           if (network?.chain?.chain_name) {
             const chainName = network.chain?.chain_name
             const q = await this.querier(chainName)
