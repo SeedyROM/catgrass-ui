@@ -50,9 +50,9 @@
           </div>
 
           <div class="my-12">
-            <a href="/profile/recipes">
+            <router-link to="/profile/recipes">
               <RecipeCard :data="recipeData" />
-            </a>
+            </router-link>
           </div>
         </section>
 

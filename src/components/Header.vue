@@ -41,7 +41,7 @@
           :key="index"
           class="flex p-2 mb-2 hover:bg-gray-200 active:bg-gray-200 rounded-md"
         >
-          <a :href="item.href">
+          <router-link :to="item.href">
             <NavSubItem>
               <template #icon>
                 <component :is="item.icon"></component>
@@ -53,7 +53,7 @@
                 {{ item.subtitle }}
               </template>
             </NavSubItem>
-          </a>
+          </router-link>
         </li>
         <li>
           <button
@@ -73,7 +73,7 @@
           class="mr-4"
           :tabIndex="index"
         >
-          <a class="text-lg font-bold" :href="item.href">
+          <router-link class="text-lg font-bold" :to="item.href">
             <component :is="item.icon" :class="[item.className]"></component>
             <span v-if="item.title" class="-mr-2">{{ item.title }}</span>
             <svg
@@ -88,7 +88,7 @@
                 d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
               />
             </svg>
-          </a>
+          </router-link>
           <ul
             v-if="item.sub && item.sub.length > 0 && !item.hideSubDesktop"
             class="right-0 p-2 bg-white rounded shadow"
@@ -98,7 +98,7 @@
               :key="sub.title"
               class="hover:bg-gray-200 rounded-md"
             >
-              <a class="flex" :href="sub.href">
+              <router-link class="flex" :to="sub.href">
                 <NavSubItem>
                   <template #icon>
                     <component :is="sub.icon"></component>
@@ -110,7 +110,7 @@
                     {{ sub.subtitle }}
                   </template>
                 </NavSubItem>
-              </a>
+              </router-link>
             </li>
           </ul>
         </li>
@@ -207,7 +207,7 @@ const navData = [
       {
         icon: WalletIcon,
         title: "My Accounts",
-        subtitle: "Manage your connected networks & accounts",
+        subtitle: "Manage your connected wallets & accounts",
         href: "/profile/accounts",
         sort: 2,
       },

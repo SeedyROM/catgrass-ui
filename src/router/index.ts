@@ -49,6 +49,10 @@ const router = createRouter({
           path: "all",
           component: () => import("../views/TasksAll.vue"),
         },
+        {
+          path: ":hash",
+          component: () => import("../views/TaskDetail.vue"),
+        },
       ],
     },
   ],

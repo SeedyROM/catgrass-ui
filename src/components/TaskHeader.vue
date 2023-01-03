@@ -1,65 +1,31 @@
 <template>
-  <div class="flex flex-col cursor-pointer">
-    <div
-      class="flex flex-col h-full relative z-20 p-6 text-white bg-pink-600 rounded-2xl"
-      :style="{ backgroundColor: bgColor, transition: 'background-color 220ms ease-in-out' }"
-    >
-      <div class="flex-col">
-        <h3 class="text-2xl font-bold">{{ title }}</h3>
+  <div
+    :class="['pt-8 pb-2 bg-noise', className]"
+    :style="{ backgroundColor: bgColor || 'rgb(245, 245, 245)' }"
+  >
+    <div class="mt-12 m-0 mx-8">
+      <div class="flex-none xs:hidden sm:hidden md:flex">
+        <Button @click="goBack" size="md" variant="secondary">
+          <ArrowSmallLeftIcon class="w-4" />
+          <span>Back</span>
+        </Button>
       </div>
-      <div class="py-4 mt-2">
-        <p v-if="!subtitle" class="flex overflow-hidden text-ellipsis">
-          by&nbsp;
-          <strong class="overflow-hidden text-ellipsis">
-            {{ creator }}
-          </strong>
-        </p>
-        <p v-html="subtitle"></p>
-      </div>
-      <slot name="body"></slot>
-      <div class="flex justify-between pt-2 mt-auto">
-        <div class="mt-auto">
-          <Balance
-            v-if="data.totalBalance"
-            :amount="data.totalBalance.amount"
-            :denom="data.totalBalance.denom"
-            :imageUrl="data.totalBalance.imageUrl"
-            :decimals="6"
-          />
-          <p v-if="stats?.copycats">{{ stats?.copycats }}</p>
-        </div>
-        <div class="flex">
-          <div
-            v-for="(chain, index) in recipeChains"
-            :key="index"
-            :class="{ 'ml-[-12px]': index > 0 }"
-          >
-            <LogoFromImage
-              class="block"
-              :rounded="true"
-              size="32"
-              :src="chain?.asset?.logo_URIs?.png || ''"
-            />
-          </div>
+      <div class="flex-none md:hidden">
+        <div class="block py-4" @click="goBack">
+          <ArrowSmallLeftIcon class="w-6" />
         </div>
       </div>
     </div>
-    <div
-      v-if="data.taskHash"
-      class="relative z-10 px-6 pt-5 pb-2 -mt-4 bg-gray-200 rounded-b-2xl"
-    >
-      <div class="flex justify-between text-xs">
-        <small
-          class="overflow-hidden pr-8 my-auto w-full text-ellipsis break-normal"
-        >
-          ID: <span class="overflow-hidden text-ellipsis break-normal">
-            {{ ellipseLongString(data.taskHash, 32) }}
-          </span>
-        </small>
-        <!-- <DocumentDuplicateIcon
-          class="w-5 h-5 text-gray-500 hover:text-gray-700 cursor-pointer"
-        /> -->
+    <div class="m-auto mt-4 mb-0 w-10/12 md:mt-4 md:mb-4 md:w-1/2">
+      <div class="flex mb-4" v-if="recipeChains">
+        <div v-for="(chain, index) in recipeChains" :key="index" :class="{ 'ml-[-12px]': index > 0 }">
+          <LogoFromImage class="block" :rounded="true" size="48" :src="chain?.asset?.logo_URIs?.png || ''" />
+        </div>
       </div>
+      <h1 class="text-2xl font-bold md:text-4xl">
+        {{ title }}
+      </h1>
+      <p class="mt-8" v-html="subtitle"></p>
     </div>
   </div>
 </template>
@@ -68,41 +34,23 @@
 import { mapState, mapActions } from "pinia";
 import { useMultiWallet } from "@/stores/multiWallet";
 import { useTaskCreator } from "@/stores/taskCreator";
-import { defineComponent } from "vue";
-import type { Action, Addr, ChainMetadata, Coin, Task } from "@/utils/types";
+import type { Action, Task } from "@/utils/types";
+import { getChainForAccount } from "@/stores/multiWallet";
 import { decodedMessage } from "@/utils/mvpData";
 import { getChainData, ellipseLongString } from "@/utils/helpers";
 import { computeTitle, computeBgColor } from "@/utils/recipeHelpers";
-import { getChainForAccount } from "@/stores/multiWallet";
-import Balance from "./core/display/Balance.vue";
-import LogoFromImage from "./core/display/LogoFromImage.vue";
+import LogoFromImage from "@/components/core/display/LogoFromImage.vue";
+import Button from '@/components/core/buttons/Button.vue'
+import {
+  ArrowSmallLeftIcon,
+} from '@heroicons/vue/24/outline'
 
-import { DocumentDuplicateIcon } from "@heroicons/vue/24/outline";
-
-export interface RecipeCardProps {
-  title: String;
-  subtitle?: string;
-  creator?: Addr;
-  recipeHash?: string;
-  fee?: Coin;
-  totalBalance?: Coin;
-
-  task?: Task;
-  networks?: ChainMetadata[];
-
-  stats?: {
-    copycats?: Number;
-    runs?: Number;
-  };
-}
-
-
-export default defineComponent({
-  props: ['data', 'containerClassName', 'active'],
+export default {
+  props: ['data', 'className'],
 
   components: {
-    Balance,
-    DocumentDuplicateIcon,
+    Button,
+    ArrowSmallLeftIcon,
     LogoFromImage,
   },
 
@@ -135,7 +83,7 @@ export default defineComponent({
         const b = this.recipeChains.length > 0 ? this.recipeChains[0].asset.display : null
         s = `croncat.${b}`
       }
-      
+
       return `by <strong>${s}</strong>`
     },
     stats() {
@@ -176,6 +124,13 @@ export default defineComponent({
 
   methods: {
     ...mapActions(useTaskCreator, ['getTaskOccurrences']),
+    goBack() {
+      const prev = this.$router.options.history.state.back
+      console.log(this.$router, prev);
+
+      if (!prev || `${prev}`.search('create') > -1) this.$router.push({ path: '/tasks/all' })
+      else this.$router.back()
+    },
     loadContext() {
       let task = this.data.task
       if (!task) return;
@@ -208,5 +163,5 @@ export default defineComponent({
   watch: {
     data: ['loadContext'],
   },
-});
+}
 </script>

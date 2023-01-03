@@ -73,7 +73,7 @@
                   <span class="inline-flex rounded-full px-2 text-xs font-semibold leading-5">{{ getTaskStats(item) }}</span>
                 </td>
                 <td class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                  <a href="#" class="text-indigo-600 hover:text-indigo-900">View</a>
+                  <router-link :to="`/tasks/${item.task_hash}`" class="text-indigo-600 hover:text-indigo-900">View</router-link>
                 </td>
               </tr>
             </tbody>
