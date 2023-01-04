@@ -1,11 +1,12 @@
 import type { Asset } from '@chain-registry/types'
 import { assets, chains } from "chain-registry";
-
+import { fromBech32 } from "@cosmjs/encoding";
 import { chainColors, unsupportedChainNames, deployedContracts } from "./constants";
 import ibcAssets from "./ibc_assets.json";
 import { Interval } from './taskHelpers';
 import type {
   AssetList,
+  Addr,
   Boundary,
   Coin,
   ChainMetadata,
@@ -44,6 +45,14 @@ export const getChainData = (chain: any) => {
 export const getDeployedContractsByChain = (chain: any): any | undefined => {
   if (!chain || !chain.chain_name) return
   const chainName = chain.chain_name.replace('testnet', '')
+  return deployedContracts[chainName]
+};
+
+export const getDeployedContractsByAddress = (addr: Addr): any | undefined => {
+  if (!addr) return
+  const { prefix } = fromBech32(addr)
+  const chainName = Object.keys(deployedContracts).find(d => d.search(prefix) > -1)
+  if (!chainName) return;
   return deployedContracts[chainName]
 };
 

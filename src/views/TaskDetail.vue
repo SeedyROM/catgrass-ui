@@ -1,24 +1,24 @@
 <template>
   <main>
     <template v-if="!exists && !loading">
-      <PageHeader title="Task Not Found" backgroundColor="#78fbff" />
+      <PageHeader title="Recipe Not Found" backgroundColor="#78fbff" />
       
       <div class="py-8 md:mx-auto md:max-w-6xl">
         <div class="max-w-[400px] mx-auto px-4">
           <h3 class="text-center my-12">
-            This task could not be found. Please check the task hash is right and try again.
+            This recipe could not be found. Please check the recipe hash is right and try again.
           </h3>
       
-          <router-link to="/tasks/all"
+          <router-link to="/explore"
             class="mx-auto flex items-center justify-center px-4 py-1 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 md:py-4 md:text-lg md:px-10">
-            View All Tasks
+            View All Recipes
           </router-link>
         </div>
       </div>
     </template>
 
     <template v-if="exists && loading">
-      <PageHeader title="Finding Task..." backgroundColor="#F9226C" />
+      <PageHeader title="Finding Recipe..." backgroundColor="#f9f9f9" />
       
       <div class="py-8 md:mx-auto md:max-w-6xl">
         <div class="max-w-[400px] mx-auto px-4">
@@ -40,12 +40,29 @@
             </Button>
           </div>
           <div v-if="isOwner" class="flex flex-col md:flex-row">
-            <Button class="mb-4 md:mb-0 md:mr-4" @click="refillTask" size="2xl" variant="primary">
-              <ArrowUpCircleIcon class="w-6" />
+            <Button
+              class="mb-4 md:mb-0 md:mr-4"
+              :disabled="refilling == true"
+              @click="refillOpen = true"
+              size="2xl"
+              variant="primary"
+            >
+              <ArrowUpCircleIcon v-if="!refilling" class="w-6" />
+              <Loader v-if="refilling" class="w-6" color="white" />
               <span class="uppercase">Refill</span>
             </Button>
-            <Button class="mb-4 md:mb-0" @click="deleteTask" size="2xl" variant="secondary">
-              <TrashIcon class="w-6" />
+            <Button
+              :disabled="deleting == true"
+              @click="deleteTask"
+              size="2xl" 
+              :class="{
+                'mb-4 md:mb-0': true,
+                'border-2 border-gray-700 hover:bg-btn-secondary-hover active:bg-btn-secondary-pressed': !deleting,
+                'border-2 border-gray-700 bg-gray-800 bg-btn-secondary-hover text-white': deleting,
+              }"
+            >
+              <TrashIcon v-if="!deleting" class="w-6" />
+              <Loader v-if="deleting" class="w-6" color="white" />
               <span class="uppercase">Delete</span>
             </Button>
           </div>
@@ -64,7 +81,8 @@
         
         <AdvancedTaskView :task="task" className="" />
 
-        <Label class="pt-12 mb-4" name="Transaction History" />
+        <!-- TODO: Needs API -->
+        <!-- <Label class="pt-12 mb-4" name="Transaction History" /> -->
         <!-- <div class="pb-12 flow-root">
           <ul role="list" class="-mb-8">
             <li v-for="(event, eventIdx) in txHistory" :key="event.id">
@@ -94,6 +112,49 @@
           </ul>
         </div> -->
 
+        <TransitionRoot as="template" :show="refillOpen">
+          <Dialog as="div" class="relative z-10" @close="refillOpen = false">
+            <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100"
+              leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
+              <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </TransitionChild>
+        
+            <div class="fixed inset-0 z-10 overflow-y-auto">
+              <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <TransitionChild as="template" enter="ease-out duration-300"
+                  enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200"
+                  leave-from="opacity-100 translate-y-0 sm:scale-100"
+                  leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                  <DialogPanel
+                    class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                    <div class="flex flex-col mb-8">
+                      <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+                        Refill Task Balance
+                      </DialogTitle>
+                      <div class="my-2">
+                        <p class="text-sm text-gray-500">Set the amount you'd like to refill, this amount will be used for both paying
+                          transaction fees and any forwarded balances used inside the task actions.</p>
+                      </div>
+
+                      <Label class="mt-8 mb-2" name="Token amount" />
+                      <TokenInputSelector :onChange="pickTokenInput" :options="availableTokens" />
+                    </div>
+                    <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                      <button type="button"
+                        class="inline-flex w-full uppercase justify-center rounded-md border border-transparent bg-gray-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                        @click="refillTask">Refill</button>
+                      <button type="button"
+                        class="mt-3 inline-flex w-full uppercase justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                        @click="refillOpen = false" ref="cancelButtonRef">Cancel</button>
+                    </div>
+                  </DialogPanel>
+                </TransitionChild>
+              </div>
+            </div>
+          </Dialog>
+        </TransitionRoot>
+
       </div>
     </template>
   </main>
@@ -101,8 +162,17 @@
 
 <script lang="ts">
 import { mapState, mapActions } from "pinia";
-import { useMultiWallet } from "@/stores/multiWallet"
-import { ellipseLongString, addCommas, formatInterval, formatBoundary } from "@/utils/helpers"
+import type { Asset } from "@chain-registry/types";
+import { useMultiWallet, getChainForAccount } from "@/stores/multiWallet"
+import {
+  ellipseLongString,
+  addCommas,
+  formatInterval,
+  formatBoundary,
+  getChainAssetList,
+  getDeployedContractsByAddress,
+} from "@/utils/helpers"
+import { deployedContracts } from "@/utils/constants"
 import { decodedMessage } from "@/utils/mvpData";
 import type { Task } from "@/utils/types"
 import PageHeader from "@/components/PageHeader.vue";
@@ -113,6 +183,7 @@ import Label from "@/components/core/display/Label.vue";
 import Balance from "@/components/core/display/Balance.vue";
 import KeyValueCard from "@/components/KeyValueCard.vue";
 import AdvancedTaskView from "@/components/AdvancedTaskView.vue";
+import TokenInputSelector from '@/components/core/inputs/TokenInputSelector.vue'
 import LogoFromImage from "@/components/core/display/LogoFromImage.vue";
 import {
   ArrowUpCircleIcon,
@@ -120,110 +191,68 @@ import {
   TrashIcon,
 } from '@heroicons/vue/24/solid'
 import { CheckIcon, HandThumbUpIcon, UserIcon } from '@heroicons/vue/20/solid'
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
-const demoTask = {
-  "task_hash": "24946f413f61e8ef1d26ce2b267dd0915549bf2f22b3a0c70b0736493d1f6e9c",
-  "owner_id": "juno1yhqft6d2msmzpugdjtawsgdlwvgq3samrm5wrw",
-  "interval": {
-    "Block": 1000
-  },
-  "boundary": {
-    "Height": {
-      "start": null,
-      "end": null
-    }
-  },
-  "stop_on_fail": false,
-  "total_deposit": [
-    {
-      "denom": "ujunox",
-      "amount": "18958800"
-    }
-  ],
-  "total_cw20_deposit": [],
-  "amount_for_one_task_native": [
-    {
-      "denom": "ujunox",
-      "amount": "37800"
-    }
-  ],
-  "amount_for_one_task_cw20": [],
-  "actions": [
-    {
-      "msg": {
-        "wasm": {
-          "execute": {
-            "contract_addr": "juno174ncqgapq7fudqj64ut4ue47gevlqp93guecjelnkquruvnpjdgsuk046w",
-            "msg": "eyAidGljayI6IHt9IH0K",
-            "funds": []
-          }
-        }
-      },
-      "gas_limit": 300000
-    }
-  ],
-  "queries": null
-}
-
-
-const txHistory = [
-  {
-    id: 1,
-    content: 'Applied to',
-    target: 'Front End Developer',
-    href: '#',
-    date: 'Sep 20',
-    datetime: '2020-09-20',
-    icon: UserIcon,
-    iconBackground: 'bg-gray-400',
-  },
-  {
-    id: 2,
-    content: 'Advanced to phone screening by',
-    target: 'Bethany Blake',
-    href: '#',
-    date: 'Sep 22',
-    datetime: '2020-09-22',
-    icon: HandThumbUpIcon,
-    iconBackground: 'bg-blue-500',
-  },
-  {
-    id: 3,
-    content: 'Completed phone screening with',
-    target: 'Martha Gardner',
-    href: '#',
-    date: 'Sep 28',
-    datetime: '2020-09-28',
-    icon: CheckIcon,
-    iconBackground: 'bg-green-500',
-  },
-  {
-    id: 4,
-    content: 'Advanced to interview by',
-    target: 'Bethany Blake',
-    href: '#',
-    date: 'Sep 30',
-    datetime: '2020-09-30',
-    icon: HandThumbUpIcon,
-    iconBackground: 'bg-blue-500',
-  },
-  {
-    id: 5,
-    content: 'Completed interview with',
-    target: 'Katherine Snyder',
-    href: '#',
-    date: 'Oct 4',
-    datetime: '2020-10-04',
-    icon: CheckIcon,
-    iconBackground: 'bg-green-500',
-  },
-]
+// const txHistory = [
+//   {
+//     id: 1,
+//     content: 'Applied to',
+//     target: 'Front End Developer',
+//     href: '#',
+//     date: 'Sep 20',
+//     datetime: '2020-09-20',
+//     icon: UserIcon,
+//     iconBackground: 'bg-gray-400',
+//   },
+//   {
+//     id: 2,
+//     content: 'Advanced to phone screening by',
+//     target: 'Bethany Blake',
+//     href: '#',
+//     date: 'Sep 22',
+//     datetime: '2020-09-22',
+//     icon: HandThumbUpIcon,
+//     iconBackground: 'bg-blue-500',
+//   },
+//   {
+//     id: 3,
+//     content: 'Completed phone screening with',
+//     target: 'Martha Gardner',
+//     href: '#',
+//     date: 'Sep 28',
+//     datetime: '2020-09-28',
+//     icon: CheckIcon,
+//     iconBackground: 'bg-green-500',
+//   },
+//   {
+//     id: 4,
+//     content: 'Advanced to interview by',
+//     target: 'Bethany Blake',
+//     href: '#',
+//     date: 'Sep 30',
+//     datetime: '2020-09-30',
+//     icon: HandThumbUpIcon,
+//     iconBackground: 'bg-blue-500',
+//   },
+//   {
+//     id: 5,
+//     content: 'Completed interview with',
+//     target: 'Katherine Snyder',
+//     href: '#',
+//     date: 'Oct 4',
+//     datetime: '2020-10-04',
+//     icon: CheckIcon,
+//     iconBackground: 'bg-green-500',
+//   },
+// ]
 
 export default {
   components: {
     PageHeader,
     KeyValueCard,
     AdvancedTaskView,
+    TokenInputSelector,
     TaskHeader,
     Balance,
     Button,
@@ -233,6 +262,12 @@ export default {
     ArrowUpCircleIcon,
     DocumentDuplicateIcon,
     TrashIcon,
+    ExclamationTriangleIcon,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
   },
 
   data() {
@@ -241,16 +276,25 @@ export default {
       ellipseLongString,
       loading: false,
       exists: true,
+      refilling: false,
+      deleting: false,
+      refillOpen: false,
       task: {},
-      txHistory,
+      refillBalance: null,
+      availableTokens: [] as Asset[],
+      // txHistory,
     };
   },
 
   computed: {
     ...mapState(useMultiWallet, ['networks', 'walletManager', 'accounts']),
     isOwner() {
-      // TODO: Check task.owner_id against all accounts
-      return true
+      if (!this.task || !this.accounts || this.accounts.length < 1) return false
+
+      // Check task.owner_id against all accounts
+      const owner_id = this.task.owner_id
+      if (!owner_id) return false
+      return this.accounts.map(a => a.address).includes(owner_id)
     },
     tasks() {
       let a: any = []
@@ -283,22 +327,8 @@ export default {
     summary() {
       const summary: any = {}
 
-      // Sum fees + deposit
-      // if (this.feesTotal && this.fundsTotal) {
-      if (this.fundsTotal) {
-        // TODO: Abstract this
-        // const feeAmt = this.feesTotal ? parseInt(this.feesTotal.amount) : 0
-        const fundAmt = this.fundsTotal ? parseInt(this.fundsTotal.amount) : 0
-        const denom = this.fundsTotal.denom ? this.fundsTotal.denom : ''
-        // summary.total_cost = { amount: `${feeAmt + fundAmt}`, denom }
-        summary.total_cost = { amount: `${fundAmt}`, denom }
-      }
-      else summary.total_cost = { amount: '0', denom: '' }
-
-      // if (this.feesTotal) summary.total_fees = this.feesTotal
-      if (this.fundsTotal) summary.total_deposit = this.fundsTotal
-      // if (this.occurrences) summary.total_occurrences = this.occurrences
-      console.log('summary', summary);
+      if (this.fundsTotal) summary.current_balance = this.fundsTotal
+      if (this.occurrences) summary.remaining_occurrences = this.occurrences
 
       return summary
     },
@@ -312,25 +342,24 @@ export default {
     end() {
       return formatBoundary(this.task.boundary, 'end')
     },
-    // feesTotal() {
-    //   if (!this.context?.totalAttachedFees) return { amount: '0', denom: '' }
-    //   return this.context.totalAttachedFees
-    // },
     fundsTotal() {
-      if (!this.context?.totalAttachedFunds) return { amount: '0', denom: '' }
-      const attachedFunds = this.context?.totalAttachedFunds ? this.context?.totalAttachedFunds : null
+      if (!this.task?.total_deposit) return { amount: '0', denom: '' }
+      const attachedFunds = this.task?.total_deposit && this.task?.total_deposit.length > 0 ? this.task.total_deposit[0] : null
       const amount = attachedFunds ? parseInt(attachedFunds.amount) : 0
       const denom = attachedFunds && attachedFunds.denom ? attachedFunds.denom : ''
       return { amount, denom }
     },
-    // occurrences() {
-    //   if (!this.context?.occurrences) return '0'
-    //   return `${this.context?.occurrences}`
-    // },
+    occurrences() {
+      if (!this.task?.total_deposit || !this.task?.amount_for_one_task_native) return '0'
+      // divide total deposit amount by amount for 1 task
+      const totalAmt = parseInt(`${this.task?.total_deposit[0].amount}`)
+      const singleAmt = parseInt(`${this.task?.amount_for_one_task_native[0].amount}`)
+      return `${Math.floor(totalAmt / singleAmt)}`
+    },
   },
 
   methods: {
-    ...mapActions(useMultiWallet, ['querier']),
+    ...mapActions(useMultiWallet, ['querier', 'execContract']),
     getTaskStats(task: Task) {
       const queries = task.queries && task.queries.length > 0 ? `${task.queries.length == 1 ? '1 query, ' : task.queries.length + ' queries, '}` : ''
       const transforms = task.transforms ? `${task.transforms.length == 1 ? ' 1 transform, ' : task.transforms.length + ' transforms, '}` : ''
@@ -344,58 +373,114 @@ export default {
       return `${Math.floor(totalAmt / singleAmt)}`
     },
     deleteTask() {
-      console.log('deleteTaskTASKKKKK', this.task);
+      // check if is not owner
+      if (!this.isOwner || !this.task?.task_hash) return
+      const c = confirm('Are you sure you want to delete this task forever?')
+      if (!c) return;
+
+      const contract_addr = getDeployedContractsByAddress(this.task.owner_id).manager
+      const msg = { remove_task: { task_hash: this.task.task_hash } }
+
+      this.sign({ contract_addr, msg, funds: [] }, 'deleting')
+    },
+    pickTokenInput(coin: Coin) {
+      this.refillBalance = coin
     },
     refillTask() {
-      console.log('refillTask', this.task);
+      // check if is not owner
+      if (!this.isOwner) return
+      let funds
+      const contract_addr = getDeployedContractsByAddress(this.task.owner_id).manager
+      const msg = { refill_task_balance: { task_hash: this.task.task_hash } }
+
+      if (this.refillBalance) funds = [this.refillBalance]
+      if (!funds) return;
+
+      this.refilling = true
+      this.refillOpen = false
+      this.sign({ contract_addr, msg, funds }, 'refilling')
+    },
+    async sign({ contract_addr, msg, funds }, type) {
+      if (!this.task?.task_hash) return;
+      // update status
+      this[type] = true
+
+      let signer
+      // Get current task "owner_id" account's chain name
+      if (this.task?.owner_id) {
+        signer = this.accounts.find((a: Account) => a.address === this.task.owner_id)
+      }
+      console.log('signer', signer);
+
+      try {
+        const txData = await this.execContract(signer, contract_addr, msg, 'auto', null, funds)
+        console.log('txData', txData);
+
+        // update status
+        this[type] = false
+        if (type === 'deleting') this.$router.push({ path: '/tasks/all' })
+        if (type === 'refilling') this.loadContext()
+      } catch (e) {
+        console.log('sign e', e);
+        // update status
+        this[type] = false
+      }
     },
     copycatTask() {
       if (!this.task?.task_hash) return;
-      this.$router.push({ path: `/create?task_hash=${this.task.task_hash}` })
+      this.$router.push({ path: `/create`, query: { copycat: this.task.task_hash } })
     },
     async loadContext() {
       const task_hash = this.$route.params?.hash
-      let task
-      console.log(this.$route.params);
-      
       if (!task_hash) {
-        console.log('TODO: No task found, handle this')
         return;
       }
 
-      // TODO: Bring back!
-      // const msgGetTask = { get_task: { task_hash } }
-      // console.log('msgGetTask', msgGetTask);
+      const msgGetTask = { get_task: { task_hash } }
+      const p = []
 
-      // // Get a task from all the networks
-      // for (const prefix in deployedContracts) {
-      //   if (deployedContracts[prefix] && deployedContracts[prefix].manager) {
-      //     const contractAddr = deployedContracts[prefix].manager
-      //     const network = this.networks.find(n => n.chain.bech32_prefix === prefix)
-      //     if (network?.chain?.chain_name) {
-      //       const chainName = network.chain?.chain_name
-      //       const q = await this.querier(chainName)
+      // Get a task from all the networks, race them
+      for (const prefix in deployedContracts) {
+        if (deployedContracts[prefix] && deployedContracts[prefix].manager) {
+          const contractAddr = deployedContracts[prefix].manager
+          const network = this.networks.find(n => n.chain.chain_name.search(prefix) > -1)
+          if (network?.chain?.chain_name) {
+            const chainName = network.chain?.chain_name
+            const q = await this.querier(chainName)
 
-      //       try {
-      //         const res = await q.wasm.queryContractSmart(contractAddr, msgGetTask)
-      //         console.log('task res', res)
-      //         task = res
-      //       } catch (e) {
-      //         // 
-      //       }
-      //     }
-      //   }
-      // }
+            p.push(new Promise(async (res, rej) => {
+              try {
+                const data = await q.wasm.queryContractSmart(contractAddr, msgGetTask)
+                res(data)
+              } catch (e) {
+                // 
+                res(null)
+              }
+            }))
+          }
+        }
+      }
+
+      // First network to complete wins
+      const tasks = await Promise.all(p)
+      const task = tasks.find(t => t != null)
 
       // TODO: Once found a task, use the known network to get tasks list for pagination
 
-      // TODO: REMOVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      task = demoTask
+      if (task) this.task = task
+      else {
+        this.exists = false
+        this.loading = false
+        return
+      }
 
-      // if (task) this.task = task
-      // else this.exists = false
+      // set the task balance tokens
+      const chain = getChainForAccount({ address: task.owner_id }, this.networks)
+      const tokens = getChainAssetList(chain)
+      const denoms = this.task.total_deposit.map(t => t.denom)
+      this.availableTokens = tokens?.filter(t => denoms.includes(t.base))
 
-      // TODO: Enable formatting
+      // Enable formatting
       const actions = task?.actions ? task.actions : []
       const queries = task?.queries ? task.queries : []
 
@@ -412,11 +497,8 @@ export default {
         if ('smart_query' in q) q.smart_query.msg = decodedMessage(q.smart_query.msg)
         return q
       })
-
-      console.log('task', task);
       
       this.task = task
-
       this.loading = false
     },
   },

@@ -50,7 +50,7 @@
           </div>
 
           <div class="my-12">
-            <router-link to="/profile/recipes">
+            <router-link :to="`/tasks/${recipeData.taskHash}`">
               <RecipeCard :data="recipeData" />
             </router-link>
           </div>
