@@ -38,7 +38,7 @@
 <script lang="ts">
 export interface ButtonProps {
   children: any
-  variant?: 'primary' | 'secondary'
+  variant?: 'primary' | 'secondary' | 'ghost'
   size?: 'sm' | 'lg' | 'xl' | '2xl'
   disabled?: boolean
   className?: string

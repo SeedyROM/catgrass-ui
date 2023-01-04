@@ -30,11 +30,11 @@
     <template v-if="exists && !loading">
       <TaskHeader :data="{ task }" />
       
-      <div class="m-auto mt-4 mb-0 w-10/12 md:mt-8 md:mb-4 md:w-1/2">
+      <div class="m-auto mt-4 mb-0 pb-8 w-10/12 md:mt-8 md:w-1/2">
         <!-- Buttons: CopyCat, Owner(Refill, Delete) -->
-        <div class="flex flex-col md:flex-row md:justify-between">
+        <div class="flex flex-col md:flex-row md:justify-between mb-12">
           <div class="flex flex-col md:flex-row">
-            <Button class="mb-4 md:mb-0 bg-green-700 hover:bg-green-800" @click="copycatTask" size="2xl" variant="primary">
+            <Button :className="{'mb-4 md:mb-0 text-white bg-green-700 hover:bg-green-800': true}" @click="copycatTask" size="2xl" variant="ghost">
               <DocumentDuplicateIcon class="w-6" />
               <span class="uppercase">CopyCat</span>
             </Button>
@@ -51,10 +51,21 @@
           </div>
         </div>
 
-        <!-- Summary: Occurences, balance info -->
 
-        <!-- TX History -->
-        <div class="py-12 flow-root">
+        <Label class="mb-2" name="Schedule" />
+        <KeyValueCard :data="schedule" :loading="loading" className="" />
+
+        <br />
+
+        <Label class="mb-2" name="Summary" />
+        <KeyValueCard :data="summary" :loading="loading" className="" />
+
+        <br />
+        
+        <AdvancedTaskView :task="task" className="" />
+
+        <Label class="pt-12 mb-4" name="Transaction History" />
+        <!-- <div class="pb-12 flow-root">
           <ul role="list" class="-mb-8">
             <li v-for="(event, eventIdx) in txHistory" :key="event.id">
               <div class="relative pb-8">
@@ -81,7 +92,7 @@
               </div>
             </li>
           </ul>
-        </div>
+        </div> -->
 
       </div>
     </template>
@@ -91,7 +102,7 @@
 <script lang="ts">
 import { mapState, mapActions } from "pinia";
 import { useMultiWallet } from "@/stores/multiWallet"
-import { ellipseLongString, addCommas } from "@/utils/helpers"
+import { ellipseLongString, addCommas, formatInterval, formatBoundary } from "@/utils/helpers"
 import { decodedMessage } from "@/utils/mvpData";
 import type { Task } from "@/utils/types"
 import PageHeader from "@/components/PageHeader.vue";
@@ -100,6 +111,8 @@ import Loader from "@/components/Loader.vue";
 import Button from "@/components/core/buttons/Button.vue";
 import Label from "@/components/core/display/Label.vue";
 import Balance from "@/components/core/display/Balance.vue";
+import KeyValueCard from "@/components/KeyValueCard.vue";
+import AdvancedTaskView from "@/components/AdvancedTaskView.vue";
 import LogoFromImage from "@/components/core/display/LogoFromImage.vue";
 import {
   ArrowUpCircleIcon,
@@ -209,6 +222,8 @@ const txHistory = [
 export default {
   components: {
     PageHeader,
+    KeyValueCard,
+    AdvancedTaskView,
     TaskHeader,
     Balance,
     Button,
@@ -256,6 +271,62 @@ export default {
         return n
       })
     },
+    schedule() {
+      const schedule: any = {}
+
+      if (this.interval) schedule.interval = this.interval
+      if (this.start) schedule.start = this.start
+      if (this.end) schedule.end = this.end
+
+      return schedule
+    },
+    summary() {
+      const summary: any = {}
+
+      // Sum fees + deposit
+      // if (this.feesTotal && this.fundsTotal) {
+      if (this.fundsTotal) {
+        // TODO: Abstract this
+        // const feeAmt = this.feesTotal ? parseInt(this.feesTotal.amount) : 0
+        const fundAmt = this.fundsTotal ? parseInt(this.fundsTotal.amount) : 0
+        const denom = this.fundsTotal.denom ? this.fundsTotal.denom : ''
+        // summary.total_cost = { amount: `${feeAmt + fundAmt}`, denom }
+        summary.total_cost = { amount: `${fundAmt}`, denom }
+      }
+      else summary.total_cost = { amount: '0', denom: '' }
+
+      // if (this.feesTotal) summary.total_fees = this.feesTotal
+      if (this.fundsTotal) summary.total_deposit = this.fundsTotal
+      // if (this.occurrences) summary.total_occurrences = this.occurrences
+      console.log('summary', summary);
+
+      return summary
+    },
+    interval() {
+      if (!this.task?.interval) return;
+      return formatInterval(this.task.interval)
+    },
+    start() {
+      return formatBoundary(this.task.boundary, 'start')
+    },
+    end() {
+      return formatBoundary(this.task.boundary, 'end')
+    },
+    // feesTotal() {
+    //   if (!this.context?.totalAttachedFees) return { amount: '0', denom: '' }
+    //   return this.context.totalAttachedFees
+    // },
+    fundsTotal() {
+      if (!this.context?.totalAttachedFunds) return { amount: '0', denom: '' }
+      const attachedFunds = this.context?.totalAttachedFunds ? this.context?.totalAttachedFunds : null
+      const amount = attachedFunds ? parseInt(attachedFunds.amount) : 0
+      const denom = attachedFunds && attachedFunds.denom ? attachedFunds.denom : ''
+      return { amount, denom }
+    },
+    // occurrences() {
+    //   if (!this.context?.occurrences) return '0'
+    //   return `${this.context?.occurrences}`
+    // },
   },
 
   methods: {
@@ -279,7 +350,8 @@ export default {
       console.log('refillTask', this.task);
     },
     copycatTask() {
-      console.log('copycatTask', this.task);
+      if (!this.task?.task_hash) return;
+      this.$router.push({ path: `/create?task_hash=${this.task.task_hash}` })
     },
     async loadContext() {
       const task_hash = this.$route.params?.hash

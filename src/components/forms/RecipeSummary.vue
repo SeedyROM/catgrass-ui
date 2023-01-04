@@ -8,56 +8,16 @@
     <br />
 
     <Label class="mb-2" name="Schedule" />
-
-    <div class="py-2 px-4 bg-white rounded-lg">
-      <div v-for="(k, i) in Object.keys(schedule)" :key="i" class="flex justify-between my-1 uppercase">
-        <span>{{k}}</span>
-        <span>{{schedule[k]}}</span>
-      </div>
-    </div>
+    <KeyValueCard :data="schedule" className="" />
 
     <br />
 
     <Label class="mb-2" name="Summary" />
-
-    <div class="py-2 px-4 bg-white rounded-lg">
-      <div v-if="!simulating" v-for="(k, i) in Object.keys(summary)" :key="i" class="flex justify-between my-1 uppercase">
-        <span>{{ formatTitle(k) }}</span>
-        <Balance v-if="summary[k] && summary[k].denom" :balance="summary[k]" :decimals="6" />
-        <span v-else>{{summary[k]}}</span>
-      </div>
-      <div v-else>
-        <Loader class="w-24 mx-auto" />
-      </div>
-    </div>
+    <KeyValueCard :data="summary" :loading="simulating" className="" />
 
     <br />
 
-    <div class="relative p-3 mt-2 mb-2 w-full text-left bg-white rounded-md cursor-default sm:text-sm">
-      <div class="flex justify-between" @click="toggleAdvanced">
-        <Label name="Advanced" />
-        <ChevronUpIcon :class="showAdvanced != true ? 'rotate-180 transform' : ''" class="h-5 w-5 text-gray-500" />
-      </div>
-      <div v-if="showAdvanced == true" class="pt-4">
-        <div v-if="task.queries && task.queries.length > 0" class="mb-4">
-          <Label class="mb-2" name="Queries" />
-          <CustomMsgCollapseItem v-for="(item, idx) in task.queries" :key="idx" :item="item" :active="activeItem == item"
-            :toggleCallback="toggleItem(item)" />
-        </div>
-        
-        <div v-if="task.transforms && task.transforms.length > 0" class="mb-4">
-          <Label class="mb-2" name="Transforms" />
-          <CustomMsgCollapseItem v-for="(item, idx) in task.transforms" :key="idx" :item="item" :active="activeItem == item"
-            :toggleCallback="toggleItem(item)" />
-        </div>
-        
-        <div v-if="task.actions && task.actions.length > 0">
-          <Label class="mb-2" name="Actions" />
-          <CustomMsgCollapseItem v-for="(item, idx) in task.actions" :key="idx" :item="item" :active="activeItem == item"
-            :toggleCallback="() => toggleItem(item)" />
-        </div>
-      </div>
-    </div>
+    <AdvancedTaskView :task="task" className="" />
   </div>
 </template>
 
@@ -65,35 +25,22 @@
 import { mapState, mapActions } from "pinia";
 import { useMultiWallet } from "@/stores/multiWallet";
 import { useTaskCreator } from "@/stores/taskCreator";
-import {
-  formatInterval,
-  formatBoundary,
-  getOccurancesTotal,
-  getFeeEstimateTotal,
-} from "@/utils/helpers"
+import { formatInterval, formatBoundary } from "@/utils/helpers"
 import { getWasmExecMsg, encodeMessage } from "@/utils/mvpData"
 import { appConfig } from "@/utils/constants"
-import {
-  ArrowPathRoundedSquareIcon,
-  ChevronUpIcon,
-} from '@heroicons/vue/24/outline'
-import CustomMsgCollapseItem from "../core/display/CustomMsgCollapseItem.vue";
 import Label from '@/components/core/display/Label.vue'
-import Loader from '@/components/Loader.vue'
-import Balance from "@/components/core/display/Balance.vue";
 import RecipeCard from '../RecipeCard.vue'
+import KeyValueCard from "@/components/KeyValueCard.vue"
+import AdvancedTaskView from "@/components/AdvancedTaskView.vue"
 import { TaskRequest } from '../../utils/types';
 
 // TODO: Setup a way to change occurrences via UI!
 export default {
   components: {
-    ArrowPathRoundedSquareIcon,
-    ChevronUpIcon,
-    CustomMsgCollapseItem,
-    Balance,
     Label,
-    Loader,
     RecipeCard,
+    KeyValueCard,
+    AdvancedTaskView,
   },
 
   data() {
@@ -164,7 +111,6 @@ export default {
     },
     occurrences() {
       if (!this.context?.occurrences) return '0'
-      // return `~${getOccurancesTotal(this.task) }`
       return `${this.context?.occurrences}`
     },
   },

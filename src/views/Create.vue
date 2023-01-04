@@ -186,6 +186,8 @@ export default {
   },
 
   mounted() {
+    console.log('HAS TASK HASH to COPYCAT:', this.$route.query);
+    
     // init default task, to reset the flow
     this.resetTaskCreator()
     this.setDefaultTask()

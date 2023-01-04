@@ -118,6 +118,7 @@ export default {
   computed: {
     ...mapState(useMultiWallet, ['networks', 'walletManager']),
     agents() {
+      // TODO: Sort by status
       return Object.values(this.agentMap)
     },
     networksStats() {
