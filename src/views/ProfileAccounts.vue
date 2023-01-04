@@ -32,7 +32,7 @@ import NetworkAccountSelector from "../components/NetworkAccountSelector.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import { mapState, mapActions } from "pinia";
 import { useMultiWallet } from "../stores/multiWallet";
-import { deployedContracts } from "../utils/constants"
+// import { deployedContracts } from "../utils/constants"
 
 export default {
   components: {
@@ -46,22 +46,22 @@ export default {
 
   methods: {
     ...mapActions(useMultiWallet, ['queryContract', 'execContract']),
-    async testquery() {
-      const contractAddr = deployedContracts.juno.manager // TN
-      const msg = { get_state: { from_index: null, limit: null } }
-      // const msg = { query_config: { } }
-      const hi = await this.queryContract(contractAddr, msg)
-      console.log('hi', hi);
-    },
-    async testexec() {
-      const contractAddr = deployedContracts.juno.manager // TN
-      const msg = { register_agent: { } }
-      // const msg = { unregister_agent: { } }
-      console.log('accounts', this.accounts);
+    // async testquery() {
+    //   const contractAddr = deployedContracts.juno.manager // TN
+    //   const msg = { get_state: { from_index: null, limit: null } }
+    //   // const msg = { query_config: { } }
+    //   const hi = await this.queryContract(contractAddr, msg)
+    //   console.log('hi', hi);
+    // },
+    // async testexec() {
+    //   const contractAddr = deployedContracts.juno.manager // TN
+    //   const msg = { register_agent: { } }
+    //   // const msg = { unregister_agent: { } }
+    //   console.log('accounts', this.accounts);
       
-      const hi = await this.execContract(this.accounts[0], contractAddr, msg, 'auto')
-      console.log('hi', hi);
-    },
+    //   const hi = await this.execContract(this.accounts[0], contractAddr, msg, 'auto')
+    //   console.log('hi', hi);
+    // },
   }
 };
 </script>

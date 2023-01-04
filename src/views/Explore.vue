@@ -6,13 +6,13 @@
       <div class="grid grid-rows-3 gap-4 w-full md:grid-cols-3">
         <!-- <Loader /> -->
         <template v-if="recipeData.length > 0">
-          <a
+          <router-link
             v-for="(recipe, index) in recipeData || []"
             :key="index"
-            href="/create"
+            to="/create"
           >
             <RecipeCard :bgColor="recipe.bgColor" :data="recipe" class="h-full" />
-          </a>
+          </router-link>
         </template>
       </div>
     </div>
