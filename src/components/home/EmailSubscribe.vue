@@ -14,7 +14,7 @@
         <div class="sm:text-center">
           <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Get notified when we're launching.
           </h2>
-          <p class="mx-auto mt-6 max-w-2xl text-lg text-teal-100">We keep things minimal, only sending the necessary messages.</p>
+          <p class="mx-auto mt-6 max-w-2xl text-lg text-teal-100">We promise to focus more on purring than spam messages.</p>
         </div>
         <form action="#" class="mt-12 sm:mx-auto sm:flex sm:max-w-lg">
           <div class="min-w-0 flex-1">

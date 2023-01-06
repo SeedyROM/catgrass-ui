@@ -250,7 +250,7 @@
                 <span class="block">Everything is</span>
                 <span class="block">better <span class="text-white font-extrabold">automated</span>.</span>
               </h1>
-              <p class="max-w-2xl mt-6 text-xl lg:text-2xl text-gray-700 tracking-tight font-extrabold">Quickly and easily automate your favorite DeFi apps, NFTs, wallets, DAOs and more.</p>
+              <p class="max-w-2xl mt-6 text-xl lg:text-2xl text-gray-700 tracking-tight font-extrabold">CronCat helps you automate your favorite DeFi apps, NFTs, wallets, DAOs and cat naps.</p>
             </div>
           </div>
         </div>

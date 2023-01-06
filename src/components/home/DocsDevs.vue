@@ -27,7 +27,7 @@
           </div>
           <img class="absolute left-0 top-0 right-0 bottom-0 bg-cover h-full opacity-10" src="/empty-state-daodao.jpeg" alt="Resources" width="1398" height="854" loading="lazy">
         </div>
-        <div class="h-full overflow-hidden rounded-2xl bg-[#E26793] text-black sm:text-center flex flex-col items-center justify-center">
+        <div class="h-full overflow-hidden rounded-2xl bg-[#FD5B70] text-black sm:text-center flex flex-col items-center justify-center">
           <div class="p-[8vmin] pt-6">
             <h3 class="text-3xl md:text-5xl leading-none font-bold tracking-tight">Join our community</h3>
             <p class="max-w-lg mx-auto mt-5 text-lg md:text-2xl font-normal text-black opacity-70">Get connected with our enthusiastic devs, ask integration questions or chat about ways to automate.</p>

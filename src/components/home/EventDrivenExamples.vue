@@ -113,13 +113,14 @@
       </main>
       <main class="flex mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
         <div class="sm:text-center lg:text-left my-auto">
-          <h3 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Always in the loop</h3>
-          <p class="mt-3 text-lg text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit ex obcaecati natus eligendi delectus, cum deleniti sunt in labore nihil quod quibusdam expedita nemo.</p>
+          <h2 class="text-lg font-semibold text-indigo-600">Event-based Automation</h2>
+          <h3 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Always ready, even right meow</h3>
+          <p class="mt-3 text-lg text-gray-500">CronCat handles watching the chain for exactly the right time to execute. Our agents react to the blockchain natively, so you don't have to.</p>
 
           <dl class="mt-10 space-y-10">
-            <div v-for="item in communicationFeatures" :key="item.id" class="relative">
+            <div v-for="item in features" :key="item.id" class="relative">
               <dt>
-                <div class="absolute flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-500 text-white">
+                <div class="absolute flex h-12 w-12 items-center justify-center rounded-xl text-white" :style="{ background: item.color }">
                   <component :is="item.icon" class="h-8 w-8" aria-hidden="true" />
                 </div>
                 <p class="ml-16 text-lg font-medium leading-6 text-gray-900">{{ item.name }}</p>
@@ -136,30 +137,30 @@
 
 <script lang="ts">
 import {
-  ChatBubbleBottomCenterTextIcon,
-  EnvelopeIcon,
+  BoltIcon,
+  LightBulbIcon,
 } from '@heroicons/vue/24/outline'
-const communicationFeatures = [
+const features = [
   {
     id: 1,
-    name: 'Mobile notifications',
-    description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-    icon: ChatBubbleBottomCenterTextIcon,
+    name: 'Dynamic Logic Queries',
+    description: 'Each task can have special data checks to evaluate if the task should go or not. Flexible enough to check things like price, NFT collections, DAO proposals or if cat treats available.',
+    icon: LightBulbIcon,
+    color: '#FFB31B',
   },
   {
     id: 2,
-    name: 'Reminder emails',
-    description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-    icon: EnvelopeIcon,
+    name: 'Realtime Actions',
+    description: `Tasks can react when market conditions change or match criteria you define to execute. Tasks are handled exactly as you intend, so you don't have to wait around to make that transaction at the right time.`,
+    icon: BoltIcon,
+    color: '#0C53D4',
   },
 ]
 
 export default {
   data() {
     return {
-      communicationFeatures
+      features
     }
   },
 }

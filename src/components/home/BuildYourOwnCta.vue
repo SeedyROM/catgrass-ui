@@ -4,7 +4,7 @@
       <div class="lg:grid lg:grid-cols-12 lg:gap-x-8 lg:gap-y-20">
         <div class="relative z-10 mx-auto max-w-2xl lg:col-span-7 lg:max-w-none lg:pt-6 xl:col-span-6">
           <h1 class="text-4xl font-medium tracking-tight text-gray-900">Build your automation</h1>
-          <p class="mt-6 text-lg text-gray-600">Take your idea to automated in a matter of minutes by configuring your custom blockchain messages.<br>Create a novel recipe for others to copycat, and you will earn royalties!</p>
+          <p class="mt-6 text-lg text-gray-600">Take your idea to automated in a matter of minutes by configuring your custom blockchain messages.<br>Create a novel recipe for others to copycat and you will earn royalties!</p>
           <div class="mt-8 flex flex-wrap gap-x-6 gap-y-4">
             <router-link class="inline-flex justify-center rounded-full text-sm uppercase py-[12px] px-[24px] transition-colors text-white bg-green-700 hover:bg-green-800" to="/create">
               <span class="mr-4 my-auto">Create Your Recipe</span>
