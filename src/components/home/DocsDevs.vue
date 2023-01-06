@@ -3,7 +3,7 @@
     <div class="mx-auto max-w-md px-6 sm:max-w-3xl lg:max-w-7xl lg:px-8 py-12">
       <div class="grid gap-[4vmin] grid-cols-12 items-center">
         <div class="col-span-12">
-          <p class="mt-12 text-[5vmin] font-bold text-black tracking-tight leading-[0.9] -indent-1">Help getting started.
+          <p class="mt-12 text-[5vmin] font-bold text-black tracking-tight leading-[0.9] -indent-1">Deep dive, without getting wet.
           </p>
         </div>
       </div>
