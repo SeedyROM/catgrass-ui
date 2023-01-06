@@ -37,6 +37,9 @@ const tailwindConfig = {
         mono: ["Space Mono", ...defaultTheme.fontFamily.mono],
         sans: ["inter", ...defaultTheme.fontFamily.sans],
       },
+      scale: {
+        'scale-80': 'transform: scaleX(.8) scaleY(.8)',
+      },
       animation,
       backgroundColor,
       borderColor,

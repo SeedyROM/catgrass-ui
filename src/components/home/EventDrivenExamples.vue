@@ -6,7 +6,7 @@
   
           <div class="transform scale-95 -rotate-3 translate-x-2 translate-y-15  block relative z-30 shadow-2xl bg-white dark:bg-gray-800 border-2 border-[#0C53D4] rounded-xl sm:rounded-xl p-4 space-y-6">
             <div class="flex items-center space-x-3.5 sm:space-x-5 lg:space-x-3.5 xl:space-x-5">
-              <div class="flex w-20 h-20 rounded-lg bg-[#0C53D4] text-white">
+              <div class="flex flex-none w-[80px] h-[80px] rounded-lg bg-[#0C53D4] text-white">
                 <ArrowsUpDownIcon class="m-auto h-8 w-8" />
               </div>
               <div class="min-w-0 flex-auto space-y-0.5">
@@ -24,7 +24,7 @@
   
           <div class="transform scale-90 rotate-2 block relative z-20 shadow-xl bg-white dark:bg-gray-800 border-2 border-[#A42754] rounded-xl sm:rounded-xl p-4 space-y-6">
             <div class="flex items-center space-x-3.5 sm:space-x-5 lg:space-x-3.5 xl:space-x-5">
-              <div class="flex w-20 h-20 rounded-lg bg-[#A42754] text-white">
+              <div class="flex flex-none w-[80px] h-[80px] rounded-lg bg-[#A42754] text-white">
                 <GiftIcon class="m-auto h-8 w-8" />
               </div>
               <div class="min-w-0 flex-auto space-y-0.5">
@@ -38,20 +38,17 @@
             </div>
           </div>
   
-          <div class="transform scale-75 -rotate-2 block relative z-10 shadow-lg bg-white dark:bg-gray-800 border-2 border-[#FFB31B] rounded-xl sm:rounded-xl p-4 space-y-6">
+          <div class="transform -rotate-2 block relative z-10 shadow-lg bg-white dark:bg-gray-800 border-2 border-[#FFB31B] rounded-xl sm:rounded-xl p-4 space-y-6" style="transform: scaleX(.8) scaleY(.8);">
             <div class="flex items-center space-x-3.5 sm:space-x-5 lg:space-x-3.5 xl:space-x-5">
-              <div class="flex w-20 h-20 rounded-lg bg-[#FFB31B] text-white">
+              <div class="flex flex-none w-[80px] h-[80px] rounded-lg bg-[#FFB31B] text-white">
                 <BuildingLibraryIcon class="m-auto h-8 w-8" />
               </div>
               <div class="min-w-0 flex-auto space-y-0.5">
                 <p class="text-[#FFB31B] text-xs sm:text-base lg:text-sm xl:text-base font-semibold uppercase">
                   DAO Proposal
                 </p>
-                <h2
-                  class="text-black dark:text-white text-base sm:text-xl lg:text-base xl:text-xl font-semibold">
-                  <strong class="underline">happytrees.juno</strong> called method <span
-                    class="text-[#FFB31B]">paint</span> on your<br>contract <strong
-                    class="underline">art.bobross.juno</strong>
+                <h2 class="text-black dark:text-white text-base sm:text-xl lg:text-base xl:text-xl font-semibold">
+                  <strong class="underline">wynd.dao</strong> proposal <span class="text-[#FFB31B]">A12</span> passed, executing $WYND to $DAO token swap.
                 </h2>
               </div>
             </div>
@@ -59,7 +56,7 @@
   
           <div class="transform scale-75 rotate-6 block relative z-1 shadow-md bg-white dark:bg-gray-800 border-2 border-[#276A7B] rounded-xl sm:rounded-xl p-4 space-y-6">
             <div class="flex items-center space-x-3.5 sm:space-x-5 lg:space-x-3.5 xl:space-x-5">
-              <div class="flex w-20 h-20 rounded-lg bg-[#276A7B] text-white">
+              <div class="flex flex-none w-[80px] h-[80px] rounded-lg bg-[#276A7B] text-white">
                 <PhotoIcon class="m-auto h-8 w-8" />
               </div>
               <div class="min-w-0 flex-auto space-y-0.5">
