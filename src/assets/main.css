@@ -336,3 +336,13 @@ input[type='number'] {
   position: absolute;
   left: 0;
 }
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}

@@ -9,13 +9,13 @@
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-[3vmin] mt-12 items-center">
         <div class="lg:col-span-2 overflow-hidden rounded-2xl text-white bg-slate-500 flex flex-col-reverse lg:flex-row items-center sm:text-center lg:text-left">
-          <div class="lg:w-[59%] relative z-10 self-end">
-            <img src="" alt="Resources" width="1632" height="1034" loading="lazy">
+          <div class="lg:w-[55%] relative z-10 self-end">
+            <img src="/dev_docs.png" alt="Resources" width="1632" height="1034" loading="lazy">
           </div>
           <div class="h-full mx-auto lg:w-[41%] px-[6vmin] pt-[8vmin] lg:p-0 lg:py-[6vmin] lg:pr-[8vmin] relative z-10">
             <h3 class="text-3xl md:text-5xl leading-none font-bold tracking-tight">Developer documentation.</h3>
             <p class="max-w-lg mt-5 text-lg md:text-2xl font-normal text-slate-200">CronCat is completely Open Source, MIT licensed, and has simple SDKs for integrations.</p>
-            <a href="https://docs.cron.cat" target="_blank" class="inline-block mt-7 whitespace-nowrap px-4 py-2 border rounded-md text-md font-semibold text-white border-white hover:text-black hover:bg-white transition-all">View Docs →</a>
+            <a href="https://docs.cron.cat" target="_blank" class="inline-block mt-7 whitespace-nowrap px-4 py-2 border rounded-full text-md font-semibold text-white border-white hover:text-black hover:bg-white transition-all">View Docs →</a>
           </div>
         </div>
         <div class="relative h-full overflow-hidden rounded-2xl bg-[#353434] text-white sm:text-center flex flex-col items-center justify-center">
@@ -23,7 +23,7 @@
             <img class="rounded-full w-24 md:mx-auto mb-4" src="/ext_logos/daodao_logo.jpeg" alt="DAODAO" loading="lazy" />
             <h3 class="text-3xl md:text-5xl leading-none font-bold tracking-tight">Open Source,<br>Run by a DAO</h3>
             <p class="max-w-md mx-auto mt-5 text-lg md:text-2xl font-normal text-slate-300">We build using transparent governance, entirely on-chain.<br><br>Powered by <a href="https://daodao.zone/" target="_blank">DAODAO</a>.</p>
-            <a href="" class="inline-block mt-8 mb-8 whitespace-nowrap px-4 py-2 border rounded-md text-md font-semibold text-gray-100 border-gray-100 hover:text-white hover:bg-gray-800 transition-all">View DAO →</a>
+            <a href="" class="inline-block mt-8 mb-8 whitespace-nowrap px-4 py-2 border rounded-full text-md font-semibold text-gray-100 border-gray-100 hover:text-white hover:bg-gray-800 transition-all">View DAO →</a>
           </div>
           <img class="absolute left-0 top-0 right-0 bottom-0 bg-cover h-full opacity-10" src="/empty-state-daodao.jpeg" alt="Resources" width="1398" height="854" loading="lazy">
         </div>

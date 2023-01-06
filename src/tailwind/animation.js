@@ -30,6 +30,14 @@ const animation = {
   "toast-slide-in-right": `toast-slide-in-right 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
   "toast-slide-in-bottom": `toast-slide-in-bottom 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
   "toast-swipe-out": `toast-swipe-out 100ms ease-out forwards`,
+  // external
+  'fade-in': 'fade-in 0.5s linear forwards',
+  marquee: 'marquee var(--marquee-duration) linear infinite',
+  'spin-slow': 'spin 4s linear infinite',
+  'spin-slower': 'spin 6s linear infinite',
+  'spin-reverse': 'spin-reverse 1s linear infinite',
+  'spin-reverse-slow': 'spin-reverse 4s linear infinite',
+  'spin-reverse-slower': 'spin-reverse 6s linear infinite',
 };
 
 module.exports = { animation };
