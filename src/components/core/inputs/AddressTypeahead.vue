@@ -188,7 +188,13 @@ export default {
           const q = await this.querier(chainName)
           let queryMsg = {}
 
+          // TODO: Check char limits before requesting
+
+          // https://github.com/public-awesome/names/blob/main/contracts/sg721-name/src/msg.rs#L169
           if (ns === 'stargaze') queryMsg = { associated_address: { name: query } }
+
+          // https://github.com/icns-xyz/icns/blob/main/contracts/icns-resolver/src/msg.rs#L57
+          if (ns === 'icns') queryMsg = { address: { name: query, bech32_prefix: '' } }
 
           // const queryMsg = stargazeMsg = {
           //   name: { address: query },
@@ -196,6 +202,9 @@ export default {
 
           // const queryMsg = icnsMsg = {
           //   icns_names: { address: query },
+          // }
+          // const queryMsg = icnsMsg = {
+          //   names: { address: query },
           // }
 
           // First get the list of agents, compute network stats

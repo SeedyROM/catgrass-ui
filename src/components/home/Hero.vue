@@ -247,8 +247,8 @@
           <div class="grid gap-[4vmin] grid-cols-12 items-center">
             <div class="col-span-12 text-center">
               <h1 class="text-[9.5vmin] md:text-[7vmin] tracking-tight leading-[1.1] font-extrabold text-gray-900">
-                <span class="block">Everything is</span>
-                <span class="block">better <span class="text-white font-extrabold">automated</span>.</span>
+                <span class="block">If This, Then That</span>
+                <span class="block">for <span class="text-white font-extrabold">{{ activeTitle }}</span>.</span>
               </h1>
               <p class="max-w-2xl mt-6 text-xl lg:text-2xl text-gray-700 tracking-tight font-extrabold">CronCat helps you automate your favorite DeFi apps, NFTs, wallets, DAOs and cat naps.</p>
             </div>
@@ -258,6 +258,36 @@
     </div>
   </section>
 </template>
+
+<script lang="ts">
+const titles = ['Blockchains', 'Apps', 'DeFi', 'NFTs', 'Wallets', 'DAOs']
+
+export default {
+  data() {
+    return {
+      timer: null,
+      idx: 0,
+    }
+  },
+
+  computed: {
+    activeTitle() {
+      return titles[this.idx]
+    },
+  },
+
+  mounted() {
+    if (!this.timer) this.timer = setInterval(() => {
+      this.idx = this.idx + 1
+      if (this.idx >= titles.length) this.idx = 0
+    }, 2000)
+  },
+
+  beforeUnmount() {
+    clearInterval(this.timer)
+  },
+}
+</script>
 
 <style scoped>
 .hero-main {
