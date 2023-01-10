@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  catgrass:
+    container_name: catgrass
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    command: [ "npm", "run", "preview" ]
+    env_file:
+      - ./.env.testnet
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
+      - type: volume
+        source: node_modules
+        target: /app/node_modules
+    ports:
+      - 8000:8000
+volumes:
+  node_modules:
