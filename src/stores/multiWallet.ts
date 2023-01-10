@@ -126,6 +126,7 @@ export const useMultiWallet = defineStore(
       _walletManager: null as any,
       _networks: [] as ChainMetadata[],
       _accounts: [] as Account[],
+      _favorites: [] as Account[],
     }),
     getters: {
       walletPickerOpen: (state: any) => state._walletPickerOpen,
@@ -135,6 +136,7 @@ export const useMultiWallet = defineStore(
       walletManager: (state: any) => state._walletManager,
       currentWallet: (state: any) => state._walletManager.currentWallet,
       networks: (state: any) => state._networks,
+      favorites: (state: any) => state._favorites,
       accounts: (state: any) => {
         return state._accounts.map((account: Account) => {
           const chain = getChainForAccount(account, state._networks)

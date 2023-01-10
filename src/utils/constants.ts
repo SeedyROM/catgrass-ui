@@ -5,6 +5,11 @@ export const appConfig = {
   gasLimitMultiplier: import.meta.env.VITE_CONFIG_GAS_MULTIPLIER || 1,
 }
 
+export const nameserviceContracts = {
+  icns: import.meta.env.VITE_NAMESERVICE_ICNS || '',
+  stargaze: import.meta.env.VITE_NAMESERVICE_STARGAZE || '',
+}
+
 export const deployedContracts = {
   archway: {
     manager: import.meta.env.VITE_CONTRACT_MANAGER_ARCHWAY || '',

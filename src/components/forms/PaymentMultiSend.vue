@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <Label class="mb-2 pt-2" name="Recipient address" />
+      <Label class="mb-2 pt-2" name="Address" />
       <AddressInput
         containerclass="grow bg-white"
         ref="addressRecipient"
@@ -46,11 +46,13 @@
         :disabled="false"
         :error="errors?.recipient_address"
       />
+      <!-- <AddressTypeahead /> -->
 
       <br />
 
       <Label class="mb-2" name="Token amount sent each time" />
       <TokenInputSelector ref="tokenRecipient" :onChange="pickTokenInput" :options="availableTokens" />
+      <Subtext v-if="errors.token_selected" class="text-red-500" text="Must pick a token to send" />
 
       <Button @click="addRecipient" :active="true" class="mt-6 mb-6 btn-success" variant="primary">
         <PlusIcon class="w-4" />
@@ -72,10 +74,12 @@ import type { Addr, Account, Coin } from '@/utils/types'
 import { getChainAssetList, getAssetByDenomOnChain, isCw20Asset, isNativeAsset } from '@/utils/helpers'
 import { actionCatalog } from '@/utils/mvpData'
 import Label from '../core/display/Label.vue'
+import Subtext from '@/components/core/display/Subtext.vue'
 import Balance from '../core/display/Balance.vue'
 import Button from '../core/buttons/Button.vue'
 import AccountSelector from '../core/inputs/AccountSelector.vue'
 import AddressInput from '../core/inputs/AddressInput.vue'
+import AddressTypeahead from '../core/inputs/AddressTypeahead.vue'
 import TokenInputSelector from '../core/inputs/TokenInputSelector.vue'
 import NumberInput from '../core/inputs/NumberInput.vue'
 import {
@@ -88,10 +92,12 @@ export default {
     TrashIcon,
     PlusIcon,
     Label,
+    Subtext,
     Balance,
     Button,
     AccountSelector,
     AddressInput,
+    AddressTypeahead,
     TokenInputSelector,
     NumberInput,
   },
@@ -104,7 +110,10 @@ export default {
       selectedAccount: null,
       selectedToken: null,
       availableTokens: [] as Asset[],
-      errors: {},
+      errors: {
+        recipient_address: false,
+        token_selected: false,
+      },
     }
   },
 
@@ -119,11 +128,18 @@ export default {
   methods: {
     ...mapActions(useTaskCreator, ['updateTask', 'updateTaskContext']),
     isValid() {
-      console.log('HERRREEEE')
-      // TODO: FINIsh!!!!!!!! Need to return false to stop progress
-      // this.toast.success("Yo, stuff is success!")
-      // this.toast.error("Yo, stuff is error!")
-      // this.toast.warning("Yo, stuff is warning!")
+      // Check there actually are addresses
+      if (!this.recipients.length) {
+        this.toast.error("Recipient missing!")
+        return false
+      }
+
+      // Check there is a token amount
+      if (!this.selectedToken || this.balance.amount === 0) {
+        this.toast.error("Please specify a token to send!")
+        return false
+      }
+
       return true
     },
     pickFromAccount(account: Account) {
@@ -140,6 +156,7 @@ export default {
       this.address = value
     },
     addRecipient() {
+      this.isValid()
       if (!this.address || !this.balance) return;
       const recipient = {
         address: this.address,

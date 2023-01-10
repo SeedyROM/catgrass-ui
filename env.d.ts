@@ -19,6 +19,8 @@ interface ImportMetaEnv {
   readonly VITE_CONTRACT_RULES_SECRET: string
   readonly VITE_CONTRACT_MANAGER_STARGAZE: string
   readonly VITE_CONTRACT_RULES_STARGAZE: string
+  readonly VITE_NAMESERVICE_ICNS: string
+  readonly VITE_NAMESERVICE_STARGAZE: string
 }
 
 interface ImportMeta {
