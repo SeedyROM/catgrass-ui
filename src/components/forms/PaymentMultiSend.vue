@@ -66,6 +66,7 @@
 import { mapState, mapActions } from "pinia";
 import { useMultiWallet } from "@/stores/multiWallet";
 import { useTaskCreator } from "@/stores/taskCreator";
+import { useToast } from "vue-toastification"
 import type { Asset } from "@chain-registry/types";
 import type { Addr, Account, Coin } from '@/utils/types'
 import { getChainAssetList, getAssetByDenomOnChain, isCw20Asset, isNativeAsset } from '@/utils/helpers'
@@ -82,7 +83,6 @@ import {
   TrashIcon,
 } from '@heroicons/vue/24/outline'
 
-// TODO: Validations
 export default {
   components: {
     TrashIcon,
@@ -111,10 +111,21 @@ export default {
   computed: {
     ...mapState(useMultiWallet, ['accounts']),
     ...mapState(useTaskCreator, ['task', 'context']),
+    toast() {
+      return useToast()
+    },
   },
 
   methods: {
     ...mapActions(useTaskCreator, ['updateTask', 'updateTaskContext']),
+    isValid() {
+      console.log('HERRREEEE')
+      // TODO: FINIsh!!!!!!!! Need to return false to stop progress
+      // this.toast.success("Yo, stuff is success!")
+      // this.toast.error("Yo, stuff is error!")
+      // this.toast.warning("Yo, stuff is warning!")
+      return true
+    },
     pickFromAccount(account: Account) {
       this.selectedAccount = account
       this.availableTokens = getChainAssetList(account.chain)

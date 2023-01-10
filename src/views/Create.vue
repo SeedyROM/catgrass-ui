@@ -20,11 +20,11 @@
 
           <ActionSelector :actions="actions" :onSelectedAction="actionCallback" />
 
-          <component :is="selectedAction.Component" />
+          <component ref="actioncomponent" :is="selectedAction.Component" />
         </section>
 
         <section :class="{ hidden: currentIndex !== 1 }" id="1">
-          <CadenceBoundary />
+          <CadenceBoundary ref="boundary" />
         </section>
 
         <section :class="{ hidden: currentIndex !== 2 }" id="2">
@@ -165,6 +165,13 @@ export default {
   methods: {
     ...mapActions(useTaskCreator, ['setDefaultTask', 'resetTaskCreator']),
     async nextSection() {
+
+      // TODO: 
+      // Validate current step IF it has validation method on it
+      if (this.$refs?.actioncomponent && this.$refs?.actioncomponent.validate) {
+        if (!this.$refs.actioncomponent.isValid()) return;
+      }
+
       this.currentIndex = this.currentIndex + 1
       console.log('NEXT:', this.currentIndex, JSON.stringify(this.task), JSON.stringify(this.context));
 
