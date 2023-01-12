@@ -20,7 +20,7 @@
 
     <div
       :class="{
-        'absolute top-12 -right-1 -left-1 z-20 flex-col p-1 bg-white rounded-lg border-2 shadow-lg': true,
+        'absolute -right-1 -left-1 z-20 flex-col p-1 bg-white rounded-lg border-2 shadow-lg': true,
         visible: toggleActive === true,
         invisible: toggleActive === false,
       }"

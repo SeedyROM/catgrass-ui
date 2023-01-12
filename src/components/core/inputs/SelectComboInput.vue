@@ -28,7 +28,7 @@
 
       <div
         :class="{
-          'overflow-y-scroll absolute top-12 -right-1 -left-1 z-20 flex-col p-1 max-h-[200px] bg-white rounded-lg border-2 shadow-lg': true,
+          'overflow-y-scroll absolute -right-1 -left-1 z-20 flex-col p-1 max-h-[200px] bg-white rounded-lg border-2 shadow-lg': true,
           visible: toggleActive === true,
           invisible: toggleActive === false,
         }"

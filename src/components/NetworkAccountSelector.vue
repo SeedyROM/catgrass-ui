@@ -73,7 +73,7 @@
 
       <ul
         :class="{
-          'absolute top-12 -right-1 -left-1 z-20 bg-white rounded-lg border-2 border-gray-100 shadow-xl menu': true,
+          'absolute -right-1 -left-1 z-20 bg-white rounded-lg border-2 border-gray-100 shadow-xl menu': true,
           hidden: disabled,
           visible: selectedNetworkIndex === index && selectedNetworkActive === true,
           invisible: selectedNetworkIndex !== index || selectedNetworkActive === false,
