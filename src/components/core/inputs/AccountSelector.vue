@@ -4,10 +4,10 @@
       v-if="state && state.chain"
       class="flex z-10 bg-white rounded-lg border-2 cursor-pointer"
       :style="{ borderColor: state.chain?.brandColor }"
+      @click="toggleList"
     >
       <div
         class="flex-col mr-2 w-full"
-        @click="toggleList"
         :style="{ minWidth: '42px' }"
       >
         <Account :account="state" :hideBalance="true" />

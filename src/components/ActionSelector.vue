@@ -1,11 +1,11 @@
 <template>
   <div class="relative">
-    <div class="flex z-10 p-4 text-gray-100 bg-gray-800 rounded-lg" @click="toggleList">
+    <div class="flex z-10 p-4 text-gray-100 bg-gray-800 rounded-lg border-b-2 border-opacity-0" @click="toggleList">
       <div class="flex px-2 w-full cursor-pointer">
         <div class="flex py-2 mr-4 w-8">
           <component :is="selectedAction.Icon" />
         </div>
-        <div class="flex-col py-2 m-auto w-full">
+        <div class="flex flex-col justify-center w-full">
           <h3 class="text-lg font-bold leading-4">{{selectedAction.title}}</h3>
           <small class="text-xs text-gray-400">{{selectedAction.subtitle}}</small>
         </div>
@@ -19,7 +19,7 @@
 
     <div
       :class="{
-        'absolute top-16 -right-1 -left-1 z-20 flex-col p-2 text-gray-100 bg-gray-500 rounded-lg shadow-lg': true,
+        'absolute -right-1 -left-1 z-20 flex-col p-2 text-gray-100 bg-gray-500 rounded-lg shadow-lg': true,
         visible: toggleActive === true,
         invisible: toggleActive === false,
       }"
@@ -31,10 +31,10 @@
         @click="selectAction(action)"
       >
         <div class="flex px-2 w-full cursor-pointer">
-          <div class="flex py-2 mr-4 w-8">
+          <div class="flex mr-4 w-8">
             <component :is="action.Icon" />
           </div>
-          <div class="flex-col py-2 m-auto w-full">
+          <div class="flex-col m-auto w-full">
             <h3 class="text-lg font-bold leading-4">{{action.title}}</h3>
             <small class="text-xs text-gray-400">{{action.subtitle}}</small>
           </div>
