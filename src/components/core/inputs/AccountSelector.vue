@@ -2,7 +2,7 @@
   <div class="relative">
     <div
       v-if="state && state.chain"
-      class="flex z-10 mb-2 bg-white rounded-lg border-2 cursor-pointer"
+      class="flex z-10 bg-white rounded-lg border-2 cursor-pointer"
       :style="{ borderColor: state.chain?.brandColor }"
     >
       <div
