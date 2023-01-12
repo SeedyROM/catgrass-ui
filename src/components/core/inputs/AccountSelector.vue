@@ -12,7 +12,7 @@
       >
         <Account :account="state" :hideBalance="true" />
       </div>
-      <div class="flex my-auto mr-4 w-6">
+      <div class="flex my-auto mr-4 w-6" @click="toggleList">
         <ChevronUpIcon v-if="toggleActive" />
         <ChevronDownIcon v-else />
       </div>

@@ -5,15 +5,15 @@
         <LogoFromImage class="block" :rounded="true" :size="42" :src="getAccountImage(account)" />
       </div>
       <div class="flex-col w-full my-auto mt-1 px-2">
-        <h3 class="block text-lg font-bold leading-4 pb-[2px] max-w-full">{{account.title}}</h3>
-        <div class="w-full">
+        <h3 class="block text-lg font-bold leading-4 mb-1 max-w-full">{{account.title}}</h3>
+        <div class="w-full flex justify-between">
           <small
-            class="block md:inline-block max-w-[220px] md:max-w-auto md:w-[48%] text-xs text-gray-400 lowercase text-ellipsis overflow-hidden">
-            {{account.address}}
+            class="block md:inline-block text-xs text-gray-400 lowercase text-ellipsis overflow-hidden">
+            {{ellipseLongString(account.address, 25)}}
           </small>
           <small
             v-if="account.balance && hideBalance != true"
-            class="block md:inline-block md:w-[48%] text-xs text-gray-400 uppercase md:ml-auto md:mr-0 md:text-right">
+            class="block md:inline-block text-xs text-gray-400 uppercase md:mr-0 md:text-right">
             <Balance :amount="account.balance.amount" :denom="account.balance.denom" :decimals="6" />
           </small>
         </div>
@@ -26,6 +26,7 @@
 import type { Account } from '../../../utils/types';
 import Balance from './Balance.vue';
 import LogoFromImage from '@/components/core/display/LogoFromImage.vue';
+import { ellipseLongString } from "@/utils/helpers";
 
 export interface AccountProps {
   account: Account
@@ -38,6 +39,12 @@ export default {
   components: {
     Balance,
     LogoFromImage,
+  },
+
+  data() {
+    return {
+      ellipseLongString,
+    };
   },
 
   methods: {
